@@ -1,5 +1,5 @@
 # JISONI
-A not-so-great, work-in-progress JSON parser written on pure V. Tested on old compiler (0.1.25) for now.
+A not-so-great, work-in-progress JSON parser written on pure V. Tested on old compiler (0.1.25) for now. Haven't converted into a module yet.
 
 ## (Proposed) API
 ```v

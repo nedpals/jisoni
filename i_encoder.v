@@ -1,4 +1,4 @@
-module main
+module jisoni
 
 import strings
 
@@ -30,27 +30,9 @@ pub fn encode(f Field) string {
             }
             g.write(']')
         }
-        String {
-            str := f as String
-            g.write('"${str.key}":"${str.value}"')
+        else {
+            g.write(f.str())
         }
-        Int {
-            num := f as Int
-            g.write('"${num.key}":${num.value.str()}')
-        }
-        Float {
-            num := f as Float
-            g.write('"${num.key}":${num.value.str()}')
-        }
-        Null {
-            nul := f as Null
-            g.write('"${nul.key}":null')
-        }
-        Bool {
-            bol := f as Bool
-            g.write('"${bol.key}":${bol.value.str()}')
-        }
-        else {}
     }
 
     return g.str()

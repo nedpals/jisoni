@@ -177,9 +177,7 @@ fn (p mut Parser) parse_array(key string) Array {
 
         if tok == `]` {
             prev_tok = tok 
-            if p.idx < content.len {
-                p.idx++
-            }
+            if p.idx < content.len { p.idx++ }
             break
         }
 
@@ -214,7 +212,7 @@ fn (p mut Parser) parse_array(key string) Array {
             continue
         }
 
-        if tok.is_digit() {
+        if tok.is_digit() || (tok in [`-`, `+`] && content[p.idx+1].is_digit()) {
             val, steps := parse_numeric_value(content, p.idx)
             if is_float(val) {
                 arr.value << val.f64()
@@ -243,6 +241,7 @@ fn (p mut Parser) parse_array(key string) Array {
             prev_tok = content[p.idx]
             continue
         }
+        
         if p.idx < content.len-1 {
             p.idx++
         } else {
@@ -288,8 +287,8 @@ fn (p mut Parser) parse() Field {
             continue
         } else {
             match p.start_parse_mode {
-                .object { p.parsed = p.parse_object('Object_0') }
-                .array { p.parsed = p.parse_array('Array_0') }
+                .object { p.parsed = p.parse_object('') }
+                .array { p.parsed = p.parse_array('') }
                 .number { p.parsed = p.parse_number_field('Number_0') }
                 .string { p.parsed = p.parse_string_field('String_0') }
                 .bool { p.parsed = p.parse_bool_field('Bool_0') }

@@ -1,7 +1,7 @@
 # JISONI
-A not-so-great, work-in-progress JSON parser written on pure V. Tested on old compiler (0.1.25) for now. Haven't converted into a module yet.
+A work-in-progress JSON parser written on pure V. Tested on old compiler (0.1.25) for now.
 
-## (Proposed) API
+## Proposed API
 ```v
 module main
 
@@ -11,7 +11,7 @@ import http
 fn main() {
     // Decoding
     resp := http.get('https://example.com')?
-    person := jisoni.decode(resp.text)
+    person := jisoni.decode(resp.text)?
 
     //Navigating
     name := person.get('name')
@@ -33,14 +33,15 @@ fn main() {
 }
 ```
 
+## Demo
+![demo](demo.png)
+
 ## TODO
 - JSON Tree Navigation
 - Encoding
 - Performance
 - Testing (Especially on JSON Test Suite)
-
-## Demo
-![demo](demo.gif)
+- Parsing errors (Avoid correcting malformed/invalid ones!)
 
 ## License
 Licensed under [MIT](LICENSE)

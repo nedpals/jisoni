@@ -25,15 +25,8 @@ pub fn (x Field) str() string {
             return '"${bol.key}": ${bol.value.str()}'
         }
         Object {
-            mut g := strings.new_builder(20000)
             obj := x as Object
-            g.write('Object {')
-            for i, f in obj.value {
-                g.write(f.str())
-                if i < obj.value.len-1 { g.write(', ') }
-            }
-            g.write('}')
-            return g.str()
+            return obj.str()
         }
         Int {
             num := x as Int
@@ -56,6 +49,20 @@ pub fn (x Field) str() string {
     }
 }
 
+pub fn (obj Object) str() string {
+    mut g := strings.new_builder(20000)
+    g.write('Object {')
+    for i, f in obj.value {
+        str := f.str()
+        for line in str.split_into_lines() {
+            g.write('\n    ' + line)
+        }
+        if i < obj.value.len-1 { g.write(', ') }
+    }
+    g.write('\n}')
+    return g.str()
+}
+
 pub fn (x ArrayValue) str() string {
     match x {
         string {
@@ -71,15 +78,8 @@ pub fn (x ArrayValue) str() string {
             return num.strlong()
         }
         Object {
-            mut g := strings.new_builder(20000)
             obj := x as Object
-            g.write('Object {')
-            for i, f in obj.value {
-                g.write(f.str())
-                if i < obj.value.len-1 { g.write(', ') }
-            }
-            g.write('}')
-            return g.str()
+            return obj.str()
         }
         Array {
             arr := x as Array
@@ -99,18 +99,23 @@ pub fn (x ArrayValue) str() string {
 }
 
 pub fn (av []ArrayValue) str() string {
-    mut final := '['
+    mut g := strings.new_builder(20000)
+    g.writeln('[')
 
     for i, x in av {
-        final += x.str()
-        if i < av.len-1 {
-            final += ', '
+        str := x.str()
+        lines := str.split_into_lines()
+        for li, line in lines {
+            g.write('    ' + line)
+            if li == lines.len-1 && i < av.len-1 { g.write(', ') }
+            g.write('\n')
         }
+        // g.write('\n')
     }
 
-    final += ']'
+    g.writeln(']')
 
-    return final
+    return g.str()
 }
 
 pub fn (xs []Field) str() string {

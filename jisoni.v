@@ -4,7 +4,7 @@ fn get(f Field, key string) Field {
     undef := Undefined{ key: key }
 
     match f {
-        String {
+        String {            
             str := f as String
             if str.key == key { return str }
         }
@@ -28,7 +28,9 @@ fn get(f Field, key string) Field {
             obj := f as Object
 
             for kv in obj.value {
-                return get(kv, key)
+                k := get_key(kv)
+                if (k != key) { continue }
+                return kv
             }
         }
         Array {
@@ -36,12 +38,11 @@ fn get(f Field, key string) Field {
             if key[0].is_digit() {
                 idx := key.int()
 
-                if idx >= 0 && idx < arr.value.len {
-                    return arr.value[idx]
-                }
-            } else {
-                return arr.value.get(key)
+                if idx < 0 && idx >= arr.value.len { return undef }
+                return arr.value[idx]
             }
+
+            return arr.value.get(key)
         }
         else {
             return undef
@@ -51,11 +52,43 @@ fn get(f Field, key string) Field {
     return undef
 }
 
-fn (xs []ArrayValue) get(key string) Field {
-    // mut curr_arr_id := 0
-    // mut curr_obj_id := 0
-    // mut curr_null_id := 0
+fn get_key(f Field) string {
+    match f {
+        String {            
+            str := f as String
+            return str.key
+        }
+        Int {
+            num := f as Int
+            return num.key
+        }
+        Bool {
+            bol := f as Bool
+            return bol.key
+        }
+        Null {
+            nul := f as Null
+            return nul.key
+        }
+        String {
+            str := f as String
+            return str.key
+        }
+        Object {
+            obj := f as Object
+            return obj.key
+        }
+        Array {
+            arr := f as Array
+            return arr.key
+        }
+        else {
+            return 'undefined'
+        }
+    }
+}
 
+fn (xs []ArrayValue) get(key string) Field {
     for x in xs {
         match x {
             Array {

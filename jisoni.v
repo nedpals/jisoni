@@ -1,4 +1,4 @@
-module main
+module jisoni
 
 fn get(f Field, key string) Field {
     undef := Undefined{ key: key }

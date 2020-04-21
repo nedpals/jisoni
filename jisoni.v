@@ -1,6 +1,18 @@
 module jisoni
 
-fn get(f Field, key string) Field {
+fn (obj Object) get(key string) Field {
+    for k, f in obj.fields {
+        if k != key { continue }
+        return f
+    }
+}
+
+fn (arr Array) get(key string) Field {
+    idx := key.int()
+    return arr.values[idx]
+}
+
+fn (f Field) get(key string) Field {
     undef := Undefined{ key: key }
 
     match f {
@@ -26,23 +38,11 @@ fn get(f Field, key string) Field {
         }
         Object {
             obj := f as Object
-
-            for kv in obj.value {
-                k := get_key(kv)
-                if (k != key) { continue }
-                return kv
-            }
+            return obj.get(key)
         }
         Array {
             arr := f as Array
-            if key[0].is_digit() {
-                idx := key.int()
-
-                if idx < 0 && idx >= arr.value.len { return undef }
-                return arr.value[idx]
-            }
-
-            return arr.value.get(key)
+            return arr.get(key)
         }
         else {
             return undef
@@ -52,7 +52,7 @@ fn get(f Field, key string) Field {
     return undef
 }
 
-fn get_key(f Field) string {
+fn (f Field) key() string {
     match f {
         String {            
             str := f as String
@@ -93,17 +93,15 @@ fn (xs []ArrayValue) get(key string) Field {
         match x {
             Array {
                 arr := x as Array
-                return get(arr, key)
+                return arr.get(key)
             }
             Object {
                 obj := x as Object
-                return get(obj, key)
+                return obj.get(key)
             }
             else {
-                return Undefined{key: key}
+                return xs[key.int()]
             }
         }
     }
-
-    return Undefined{key: key}
 }

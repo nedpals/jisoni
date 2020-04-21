@@ -1,48 +1,48 @@
-module main
+module jisoni
 
-type Field = String | Array | Int | Float | Bool | Null | Object | Undefined | ArrayValue
-type ArrayValue = string | int | f64 | Object | Array | bool | Null
+pub type Field = String | Array | Int | Float | Bool | Null | Object | Undefined | ArrayValue
+pub type ArrayValue = string | int | f64 | Object | Array | bool | Null
 
-struct Undefined {
+pub struct Undefined {
     key string
     undefined bool = true
 }
 
-struct String {
+pub struct String {
     key string
     value string
 }
 
-struct Bool {
+pub struct Bool {
     key string
     value bool
 }
 
-struct Int {
+pub struct Int {
     key string
     value int
 }
 
-struct Float {
+pub struct Float {
     key string
     value f64
 }
 
-struct Null {
+pub struct Null {
     key string
     value bool = true
 }
 
-struct Object {
+pub struct Object {
 mut:
     key string = 'Object_0'
-    value []Field
+    fields map[string]Field
 }
 
-struct Array {
+pub struct Array {
 mut:
     key string
-    value []ArrayValue
+    values []ArrayValue
 }
 
 // hacky way to prove string is float or an int or not

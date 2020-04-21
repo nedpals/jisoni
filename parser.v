@@ -62,7 +62,7 @@ fn (p mut Parser) parse_object(key string) Object {
     mut cur_key := ''
     mut key_set := false
     mut prev_tok := ` `
-    mut obj := Object {key: key, value: []}
+    mut obj := Object {key: key, fields: map[string]Field}
     content := p.content
 
     for {
@@ -92,21 +92,21 @@ fn (p mut Parser) parse_object(key string) Object {
         if key_set {
             if tok == `"` {
                 prev_tok = tok
-                obj.value << p.parse_string_field(cur_key)
+                obj.fields[cur_key] = p.parse_string_field(cur_key)
                 continue
             }
 
             if tok.is_letter() {
                 if tok == `t` || tok == `f` {
                     prev_tok = tok
-                    obj.value << p.parse_bool_field(cur_key)
+                    obj.fields[cur_key] = p.parse_bool_field(cur_key)
                     continue
                 }
 
                 if tok == `n` {
                     nul := p.parse_null_field('Null_${curr_null_id}')
                     if nul.value == true {
-                        obj.value << nul
+                        obj.fields['Null_${curr_null_id}'] = nul
                         curr_null_id++
                     }
                     prev_tok = content[p.idx]
@@ -117,7 +117,7 @@ fn (p mut Parser) parse_object(key string) Object {
             }
 
             if tok.is_digit() && prev_tok == `:` {
-                obj.value << p.parse_number_field(cur_key) 
+                obj.fields[cur_key] = p.parse_number_field(cur_key) 
                 prev_tok = content[p.idx]
                 continue
             }
@@ -140,13 +140,13 @@ fn (p mut Parser) parse_object(key string) Object {
             }
 
             if tok == `{` {
-                obj.value << p.parse_object(cur_key)
+                obj.fields[cur_key] = p.parse_object(cur_key)
                 prev_tok = content[p.idx-1]
                 continue
             }
 
             if tok == `[` {
-                obj.value << p.parse_array(cur_key)
+                obj.fields[cur_key] = p.parse_array(cur_key)
                 prev_tok = content[p.idx-1]
                 continue
             } 
@@ -161,17 +161,17 @@ fn (p mut Parser) parse_array(key string) Array {
     mut curr_null_id := 0
     mut curr_obj_id := 0
     mut curr_arr_id := 0
+    mut curr_idx := 0
     mut prev_tok := ` `
-    mut arr := Array{key: key, value: []}
+    mut arr := Array{key: key, values: []}
     content := p.content
 
-    // println('parsing a new array, start_idx: ' + p.idx.str())
     for {
         tok := content[p.idx]
 
         if tok == `[` && prev_tok in [`[`, `,`] {
-            arr.value << p.parse_array('Array_${curr_arr_id}')
-            curr_arr_id++
+            arr.values << p.parse_array(curr_idx.str())
+            curr_idx++
             continue
         }
 
@@ -197,47 +197,48 @@ fn (p mut Parser) parse_array(key string) Array {
         }
 
         if tok == `{` {
-            arr.value << p.parse_object('Object_${curr_obj_id}')
-            curr_obj_id++
+            arr.values << p.parse_object(curr_idx.str())
             prev_tok = content[p.idx]
+            curr_idx++
             continue
         }
 
         if tok == `"` {
             val, steps := parse_str(content, p.idx)
-            arr.value << val
+            arr.values << val
             p.idx += steps
             if p.idx >= content.len-1 { break }
             prev_tok = content[p.idx]
+            curr_idx++
             continue
         }
 
         if tok.is_digit() || (tok in [`-`, `+`] && content[p.idx+1].is_digit()) {
             val, steps := parse_numeric_value(content, p.idx)
             if is_float(val) {
-                arr.value << val.f64()
+                arr.values << val.f64()
             } else {
-                arr.value << val.int()
+                arr.values << val.int()
             }
             p.idx += steps
             prev_tok = content[p.idx]
+            curr_idx++
             continue
         }
 
         if tok.is_letter() && (tok == `t` || tok == `f`) {
             bol, steps := parse_bool(content, p.idx)
-            arr.value << bol
+            arr.values << bol
             p.idx += steps
             prev_tok = content[p.idx]
+            curr_idx++
             continue
         }
 
         if tok.is_letter() && tok == `n` {
-            nul := p.parse_null_field('Null_${curr_null_id}')
-            if nul.value == true {
-                arr.value << nul
-                curr_null_id++
-            }
+            nul := p.parse_null_field(curr_idx.str())
+            if nul.value == true { arr.values << nul }
+            curr_idx++
             prev_tok = content[p.idx]
             continue
         }
@@ -260,7 +261,7 @@ fn new_parser(content string) Parser {
     }
 }
 
-fn (p mut Parser) parse() Field {
+fn (p mut Parser) parse() ?Field {
     content := p.content
 
     for {
@@ -303,9 +304,11 @@ fn (p mut Parser) parse() Field {
     return p.parsed
 }
 
-fn decode(content string) Field {
+pub fn decode(content string) ?Field {
     mut p := new_parser(content)
-    p.parse()
+    p.parse() or {
+        return error('Error decoding JSON')
+    }
 
     return p.parsed
 }

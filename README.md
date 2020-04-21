@@ -1,5 +1,5 @@
 # JISONI
-A work-in-progress JSON parser written on pure V. Tested on old compiler (0.1.25) for now.
+A work-in-progress JSON parser written on pure V. ~~Tested on old compiler (0.1.25) for now.~~
 
 ## Proposed API
 ```v
@@ -37,6 +37,7 @@ fn main() {
 ![demo](demo.png)
 
 ## TODO
+- Function Organization
 - JSON Tree Navigation
 - Encoding
 - Performance

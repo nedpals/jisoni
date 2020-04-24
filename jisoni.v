@@ -1,55 +1,32 @@
 module jisoni
 
 fn (obj Object) get(key string) Field {
-    for k, f in obj.fields {
-        if k != key { continue }
-        return f
-    }
+    return obj.fields[key]
 }
 
-fn (arr Array) get(key string) Field {
-    idx := key.int()
-    return arr.values[idx]
+fn (arr Array) get(key int) Field {
+    return arr.values[key]
+}
+
+fn (xs []ArrayValue) get(key int) ArrayValue {
+    return xs[key]
 }
 
 fn (f Field) get(key string) Field {
-    undef := Undefined{ key: key }
-
     match f {
-        String {            
-            str := f as String
-            if str.key == key { return str }
-        }
-        Int {
-            num := f as Int
-            if num.key == key { return num }
-        }
-        Bool {
-            bol := f as Bool
-            if bol.key == key { return bol }
-        }
-        Null {
-            nul := f as Null
-            if nul.key == key { return nul }
-        }
-        String {
-            str := f as String
-            if str.key == key { return str }
-        }
-        Object {
-            obj := f as Object
-            return obj.get(key)
-        }
-        Array {
-            arr := f as Array
-            return arr.get(key)
-        }
-        else {
-            return undef
-        }
+        Object { return it.get(key) }
+        Array { return it.get(key.int()) }
+        ArrayValue { return it.get(key) }
+        else { return Undefined{ key: key } }
     }
+}
 
-    return undef
+fn (av ArrayValue) get(key string) Field {
+    match av {
+        Object { return it.get(key) }
+        Array { return it.get(key.int()) }
+        else { return Undefined{ key: key } }
+    }
 }
 
 fn (f Field) key() string {
@@ -82,26 +59,6 @@ fn (f Field) key() string {
             arr := f as Array
             return arr.key
         }
-        else {
-            return 'undefined'
-        }
-    }
-}
-
-fn (xs []ArrayValue) get(key string) Field {
-    for x in xs {
-        match x {
-            Array {
-                arr := x as Array
-                return arr.get(key)
-            }
-            Object {
-                obj := x as Object
-                return obj.get(key)
-            }
-            else {
-                return xs[key.int()]
-            }
-        }
+        else { return 'undefined' }
     }
 }

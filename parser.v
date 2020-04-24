@@ -7,6 +7,7 @@ enum StartParseMode {
     string
     null
     bool
+    invalid
 }
 
 struct Parser {
@@ -14,8 +15,7 @@ mut:
     content string
     idx int = 0
     parsed Field
-    valid_start_json bool = false
-    start_parse_mode StartParseMode
+    start_parse_mode StartParseMode = .invalid
 }
 
 fn (p mut Parser) parse_number_field(key string) Field {
@@ -158,9 +158,6 @@ fn (p mut Parser) parse_object(key string) Object {
 }
 
 fn (p mut Parser) parse_array(key string) Array {
-    mut curr_null_id := 0
-    mut curr_obj_id := 0
-    mut curr_arr_id := 0
     mut curr_idx := 0
     mut prev_tok := ` `
     mut arr := Array{key: key, values: []}
@@ -250,7 +247,6 @@ fn (p mut Parser) parse_array(key string) Array {
         }
     }
 
-    // println('done parsing, index now at: ' + p.idx.str())
     return arr
 }
 
@@ -266,39 +262,38 @@ fn (p mut Parser) parse() ?Field {
 
     for {
         tok := content[p.idx]
-        // println('[main] ' + tok.str() + ' ' + p.idx.str())
-
         if tok.is_space() {
             p.idx++
             if p.idx == p.content.len { break }
             continue
         }
 
-        if !p.valid_start_json {
-            if tok == `{` { p.start_parse_mode = .object }
-            if tok == `[` { p.start_parse_mode = .array }
-            if tok.is_digit() || (tok in [`-`, `+`] && content[p.idx+1].is_digit()) {
-                p.start_parse_mode = .number
-            }
-            if tok in [`t`, `f`] { p.start_parse_mode = .bool }
-            if tok == `n` && content.len == 4 { p.start_parse_mode = .null }
-            if tok == `"` { p.start_parse_mode = .string }
-
-            p.valid_start_json = true
-            continue
-        } else {
-            match p.start_parse_mode {
-                .object { p.parsed = p.parse_object('') }
-                .array { p.parsed = p.parse_array('') }
-                .number { p.parsed = p.parse_number_field('Number_0') }
-                .string { p.parsed = p.parse_string_field('String_0') }
-                .bool { p.parsed = p.parse_bool_field('Bool_0') }
-                .null { p.parsed = p.parse_null_field('Null_0') }
-                else {}
+        if p.start_parse_mode == .invalid {
+            match tok {
+                `{` { p.start_parse_mode = .object }
+                `[` { p.start_parse_mode = .array }
+                `"` { p.start_parse_mode = .string }
+                else {
+                    if tok.is_digit() || (tok in [`-`, `+`] && content[p.idx+1].is_digit()) {
+                        p.start_parse_mode = .number
+                    }
+                    if tok in [`t`, `f`] { p.start_parse_mode = .bool }
+                    if tok == `n` && content.len == 4 { p.start_parse_mode = .null }
+                }
             }
 
             break
         }
+    }
+
+    match p.start_parse_mode {
+        .object { p.parsed = p.parse_object('') }
+        .array { p.parsed = p.parse_array('') }
+        .number { p.parsed = p.parse_number_field('Number_0') }
+        .string { p.parsed = p.parse_string_field('String_0') }
+        .bool { p.parsed = p.parse_bool_field('Bool_0') }
+        .null { p.parsed = p.parse_null_field('Null_0') }
+        .invalid { println('invalid JSON.') }
     }
 
     return p.parsed

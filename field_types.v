@@ -55,14 +55,8 @@ fn is_float(s string) bool {
             has_notation = true
         }
 
-        if c == `.` {
-            has_dot = true
-        }
+        if c == `.` { has_dot = true }
     }
-
-    if has_notation || has_dot {
-        return true
-    }
-
-    return false
+    
+    return has_notation || has_dot
 }

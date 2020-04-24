@@ -55,7 +55,6 @@ fn parse_str(content string, start_idx int) (string, int) {
     }
 
     steps := i - start_idx
-    // println('[parse-str] ' + steps.str())
     return txt.trim_space(), steps
 }
 
@@ -75,11 +74,7 @@ fn check_if_null(content string, start_idx int) (bool, int) {
     }
 
     steps := i - start_idx
-    if value == 'null' {
-        return true, steps
-    } 
-    
-    return false, steps
+    return value == 'null', steps
 }
 
 fn parse_bool(content string, start_idx int) (bool, int) {
@@ -89,7 +84,6 @@ fn parse_bool(content string, start_idx int) (bool, int) {
 
     for {
         tok := content[i]
-        // println(tok.str() + ' ' + i.str())
 
         if tok.is_space() || tok in [`,`, `}`, `]`] || i == content.len-1 {
             if tok.is_space() { i++ }
@@ -109,6 +103,5 @@ fn parse_bool(content string, start_idx int) (bool, int) {
     }
 
     steps := i - start_idx
-    // println('[parse-bool] ' + steps.str())
     return bool_val, steps
 }

@@ -1,4 +1,4 @@
-module jisoni
+module main
 
 fn parse_numeric_value(content string, start_idx int) (string, int) {
     mut i := start_idx
@@ -8,8 +8,10 @@ fn parse_numeric_value(content string, start_idx int) (string, int) {
         tok := content[i]
         if tok.is_hex_digit() || tok in [`-`, `+`, `.`] {
             val += tok.str()
-            i++
-            continue
+            if i < content.len-1 {
+                i++
+                continue
+            }
         }
 
         break

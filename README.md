@@ -1,5 +1,5 @@
 # JISONI
-A work-in-progress JSON parser written on pure V. ~~Tested on old compiler (0.1.25) for now.~~
+A work-in-progress JSON parser written on pure V. It aims to [replace CJSON](https://github.com/vlang/v/issues/309) and provides a cleaner and simple-to-use API for encoding and decoding JSON.
 
 ## Proposed API
 ```v

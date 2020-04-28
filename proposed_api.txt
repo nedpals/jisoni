@@ -5,7 +5,7 @@ import http
 
 fn main() {
     // Decoding
-    resp := http.get('https://example.com')?
+    resp := http.get('https://example.com') or {}
     person := jisoni.decode(resp.text)
 
     //Navigating

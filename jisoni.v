@@ -1,4 +1,4 @@
-module jisoni
+module main
 
 fn (obj Object) get(key string) Field {
     return obj.fields[key]
@@ -46,10 +46,6 @@ fn (f Field) key() string {
         Null {
             nul := f as Null
             return nul.key
-        }
-        String {
-            str := f as String
-            return str.key
         }
         Object {
             obj := f as Object

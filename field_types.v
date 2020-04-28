@@ -1,4 +1,4 @@
-module jisoni
+module main
 
 pub type Field = String | Array | Int | Float | Bool | Null | Object | Undefined | ArrayValue
 pub type ArrayValue = string | int | f64 | Object | Array | bool | Null
@@ -30,7 +30,6 @@ pub struct Float {
 
 pub struct Null {
     key string
-    value bool = true
 }
 
 pub struct Object {

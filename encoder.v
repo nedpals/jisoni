@@ -1,4 +1,4 @@
-module jisoni
+module main
 import strings
 
 pub fn (x Field) str() string {
@@ -10,8 +10,8 @@ pub fn (x Field) str() string {
         Array { return it.str() }
         Null { return 'null' }
         ArrayValue { return it.str() }
+        Float { return it.value.strlong() }
         Undefined { return 'undefined' }
-        else { return 'Unknown' }
     }
 }
 
@@ -40,11 +40,11 @@ pub fn (obj Object) str() string {
         f := obj.fields[k]
         str := f.json_str()
         for line in str.split_into_lines() {
-            g.write('\n    ' + line)
+            g.write(line)
         }
         if i < obj_keys.len-1 { g.write(', ') }
     }
-    g.write('\n}')
+    g.write('}')
     return g.str()
 }
 
@@ -57,26 +57,23 @@ pub fn (x ArrayValue) str() string {
         Array { return it.values.str() }
         bool { return it.str() }
         Null { return 'null' }
-        else { return 'null' }
     }
 }
 
 pub fn (av []ArrayValue) str() string {
     mut g := strings.new_builder(20000)
-    g.writeln('[')
+    g.write('[')
 
     for i, x in av {
         str := x.str()
         lines := str.split_into_lines()
         for li, line in lines {
-            g.write('    ' + line)
+            g.write(line)
             if li == lines.len-1 && i < av.len-1 { g.write(', ') }
-            g.write('\n')
         }
-        // g.write('\n')
     }
 
-    g.writeln(']')
+    g.write(']')
 
     return g.str()
 }

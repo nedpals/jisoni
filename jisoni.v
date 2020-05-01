@@ -31,30 +31,13 @@ fn (av ArrayValue) get(key string) Field {
 
 fn (f Field) key() string {
     match f {
-        String {            
-            str := f as String
-            return str.key
-        }
-        Int {
-            num := f as Int
-            return num.key
-        }
-        Bool {
-            bol := f as Bool
-            return bol.key
-        }
-        Null {
-            nul := f as Null
-            return nul.key
-        }
-        Object {
-            obj := f as Object
-            return obj.key
-        }
-        Array {
-            arr := f as Array
-            return arr.key
-        }
+        String { return it.key }
+        Int { return it.key }
+        Bool { return it.key }
+        Null { return it.key }
+        Object { return it.key }
+        Array { return it.key }
+        Float { return it.key }
         else { return 'undefined' }
     }
 }

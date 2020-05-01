@@ -14,7 +14,10 @@ struct Parser {
 mut:
     content string
     empty_nested_array_count int = 0
+    empty_key_count int = 0
     idx int = 0
+    prev_tok byte = ` `
+    curr_null_id int = 0
     parsed Field
     parse_mode ParseMode = .invalid
 }
@@ -31,9 +34,13 @@ fn (p Parser) is_false(idx int) bool {
     return p.content.len >= 5 && p.content[idx..idx+5] == 'false'
 }
 
+fn (p Parser) is_bool (idx int) bool {
+    return p.is_true(idx) || p.is_false(idx) 
+}
+
 fn (p mut Parser) parse_number_field(key string) Field {
     value, steps := parse_numeric_value(p.content, p.idx)
-    p.idx += (steps-1)
+    p.idx += steps
 
     // check if int
     if is_float(value) {
@@ -64,20 +71,75 @@ fn (p mut Parser) parse_null_field(key string) Null {
     return Null{key}
 }
 
+fn (p Parser) has_comments(idx int) ?int {
+    if p.content[idx] == `/` && p.content[idx+1] == `*` {
+        return error('json: comments are not allowed.')
+    }
+
+    return 1
+}
+
+fn (p mut Parser) parse_obj_field(cur_key string) ?Field {
+    tok := p.content[p.idx]
+    mut fi := Field {}
+
+    if tok == `"` {
+        p.prev_tok = tok
+        fi = p.parse_string_field(cur_key)
+        return fi
+    }
+
+    if tok.is_letter() {
+        if p.is_bool(p.idx) {
+            p.prev_tok = tok
+            fi = p.parse_bool_field(cur_key)
+            return fi
+        }
+
+        if p.is_null(p.idx) {
+            nul := p.parse_null_field(cur_key)
+            p.prev_tok = p.content[p.idx]
+            fi = nul
+            return fi
+        }
+
+        return error('json: invalid identifier')
+    }
+
+    if tok.is_digit() || tok in [`-`, `+`] {
+        num := p.parse_number_field(cur_key) 
+        p.prev_tok = p.content[p.idx]
+        fi = num
+        return fi
+    }
+
+    if tok == `{` {
+        nobj := p.parse_object(cur_key) or { return error(err) }
+        p.prev_tok = p.content[p.idx-1]
+        fi = nobj
+        return fi
+    }
+
+    if tok == `[` {
+        arr := p.parse_array(cur_key) or { return error(err) }
+        p.prev_tok = p.content[p.idx-1]
+        fi = arr
+        return fi
+    } 
+}
+
 fn (p mut Parser) parse_object(key string) ?Object {
-    mut curr_null_id := 0
     mut cur_key := ''
     mut key_set := false
-    mut has_closed := false
     mut prev_tok := ` `
-    mut obj := Object {key: key, fields: map[string]Field}
+    mut obj := Object{key, map[string]Field}
     content := p.content
 
     for {
         tok := content[p.idx]
+
         if p.idx == p.content.len-1 && tok != `}` {
-            println('json: expected "}", found "${tok.str()}"')
-            exit(1)
+            return error('json: expected "}", found "${tok.str()}"')
         }
 
         if tok.is_space() || (tok == `{` && !key_set) {
@@ -86,108 +148,68 @@ fn (p mut Parser) parse_object(key string) ?Object {
             continue
         }
 
-        if tok == `}` {
-            prev_tok = tok 
-            // TODO detect later
-            has_closed = true
-            if p.idx < content.len {
-                p.idx++
-            }
-            break
+        if tok == `/` {
+            p.has_comments(p.idx) or { return error(err) }
         }
 
-        if tok == `/` && p.content[p.idx+1] == `*` {
-            println('json: comments are not allowed.')
-            exit(1)
+        if tok == `}` {
+            prev_tok = tok 
+            if p.idx < content.len { p.idx++ }
+            break
         }
 
         if !key_set {
             if tok == `"` {
                 o_key, steps := parse_str(content, p.idx)
-                if o_key.len == 0 {
-                    println('json: object with empty key is not allowed.')
-                    exit(1)
+                if o_key.len == 0 { p.empty_key_count++ }
+                if p.empty_key_count > 1 {
+                    return error('json: object with empty key is not allowed.')
                 }
                 cur_key = o_key
                 key_set = true
                 p.idx += steps
-                if content[p.idx] != `:` {
-                    println('json: missing colon')
-                    exit(1)
+                if p.content[p.idx] != `:` {
+                    return error('json: missing colon')
+                } else {
+                    p.prev_tok = p.content[p.idx]
                 }
+                p.idx++
                 continue
             } else {
-                println('json: invalid "${tok.str()}", expected \'"\'')
-                exit(1)
-            }
-        }
-
-        if key_set {
-            if tok == `"` {
-                prev_tok = tok
-                obj.fields[cur_key] = p.parse_string_field(cur_key)
-                continue
-            }
-
-            if tok.is_letter() {
-                if p.is_true(p.idx) || p.is_false(p.idx) {
-                    prev_tok = tok
-                    obj.fields[cur_key] = p.parse_bool_field(cur_key)
+                if tok == `,` {
+                    p.idx++
                     continue
                 }
 
-                if p.is_null(p.idx) {
-                    nul := p.parse_null_field('Null_${curr_null_id}')
-                    obj.fields['Null_${curr_null_id}'] = nul
-                    curr_null_id++
-                    prev_tok = content[p.idx]
-                    continue
+                return error('json: invalid "${tok.str()}", expected \'"\'')
+            }
+        } else {
+            if tok == `:` && p.prev_tok == `:` {
+                return error('json: extra colon')
+            }
+
+            fi := p.parse_obj_field(cur_key) or { return error(err) }
+            obj.fields[cur_key] = fi
+
+            if p.content[p.idx] in [`,`, `}`] {
+                if p.content[p.idx] == `,` && p.content[p.idx+1] in [`,`, `}`] {
+                    return error('json: trailing comma')
                 }
 
-                continue
-            }
-
-            if tok.is_digit() && prev_tok == `:` {
-                obj.fields[cur_key] = p.parse_number_field(cur_key) 
+                cur_key = ''
+                key_set = false
                 prev_tok = content[p.idx]
                 continue
-            }
-
-            if tok == `,` {
-                if content[p.idx-1] != `,` || prev_tok != `,` {
-                    cur_key = ''
-                    key_set = false
-                } else {
-                    println('json: trailing comma')
-                    exit(1)
+            } else {
+                if p.content[p.idx].is_space() {
+                    p.idx++
                 }
-                prev_tok = content[p.idx]
-                if p.idx == content.len-1 { break }
-                p.idx++
-                continue
             }
 
-            if tok == `:` {
-                prev_tok = tok 
-                p.idx++
-                continue
+            if p.content[p.idx] !in [`,`, `}`] {
+                return error('json: invalid separators')
             }
-
-            if tok == `{` {
-                nobj := p.parse_object(cur_key) or { return error(err) }
-                obj.fields[cur_key] = nobj
-                prev_tok = content[p.idx-1]
-                continue
-            }
-
-            if tok == `[` {
-                arr := p.parse_array(cur_key) or { return error(err) }
-                obj.fields[cur_key] = arr
-                prev_tok = content[p.idx-1]
-                continue
-            } 
         }
-        p.idx++
     }
 
     return obj
@@ -200,22 +222,14 @@ fn (p mut Parser) parse_array(key string) ?Array {
     content := p.content
 
     if p.empty_nested_array_count > 501 {
-        // test Optional
         return error('json: maximum number of empty nested arrays is 500.')
-        // exit(1)
     }
 
     for {
-        tok := content[p.idx]
-        // println(tok)
-        if p.idx == content.len-1 && tok != `]` {
-            println('json: unterminated array')
-            exit(1)
-        }
+        tok := p.content[p.idx]
 
         if tok == `:` {
-            println('json: colons are not allowed inside arrays.')
-            exit(1)
+            return error('json: colons are not allowed inside arrays.')
         }
 
         if tok == `[` && prev_tok in [`[`, `,`] {
@@ -227,31 +241,31 @@ fn (p mut Parser) parse_array(key string) ?Array {
         }
 
         if tok == `/` && p.content[p.idx+1] == `*` {
-            println('json: comments are not allowed.')
-            exit(1)
+            return error('json: comments are not allowed.')
         }
 
         if tok == `]` {
             prev_tok = tok 
             if p.idx < content.len { p.idx++ }
-            if p.idx+1 < p.content.len && p.content[p.idx+1] == `]` {
-                println('json: extra closing bracket found')
-                exit(1)
-            }
             break
         }
 
         if tok.is_space() || tok in [`[`, `:`] {
-            if tok == `[` { prev_tok = tok }
+            if tok == `[` {  
+                if prev_tok != ` ` && prev_tok !in [`,`, `[`] {
+                    return error('json: missing comma')
+                }
+
+                prev_tok = tok
+            }
+
             if tok.is_space() {
-                if prev_tok.is_digit() || prev_tok == `"` || prev_tok.is_letter() {
-                    println('json: missing comma')
-                    exit(1)
+                if (prev_tok.is_digit() || prev_tok == `"` || prev_tok.is_letter()) && p.content[p.idx+1] !in [`,`, `]`] {
+                    return error('json: missing comma')
                 }
 
                 if p.idx == p.content.len-1 {
-                    println('json: expected "]", found space')
-                    exit(1)
+                    return error('json: expected "]", found space')
                 }
             }
             p.idx++
@@ -259,17 +273,16 @@ fn (p mut Parser) parse_array(key string) ?Array {
         }
 
         if tok == `,` {
-            if prev_tok == `,` {
-                println('json: invalid placement of comma')
-                exit(1)
+            if p.content[p.idx-1] == `,` {
+                return error('json: invalid placement of comma')
             }
+
             if (arr.values.len == 0 || prev_tok == `[`) || p.content[p.idx+1] == `]` {
-                println('json: invalid comma')
-                exit(1)
+                return error('json: invalid comma')
             }
+            
             if p.idx == content.len-1 || (content[p.idx-1].is_space() && prev_tok in [`,`,`[`])  { 
-                println('json: trailing comma')
-                exit(1)
+                return error('json: trailing comma')
             }
             prev_tok = tok
             p.idx++
@@ -279,7 +292,7 @@ fn (p mut Parser) parse_array(key string) ?Array {
         if tok == `{` {
             obj := p.parse_object(curr_idx.str()) or { return error(err) }
             arr.values << obj
-            prev_tok = content[p.idx]
+            prev_tok = p.content[p.idx]
             curr_idx++
             continue
         }
@@ -296,9 +309,13 @@ fn (p mut Parser) parse_array(key string) ?Array {
 
         if tok.is_digit() || (tok in [`-`, `+`] && content[p.idx+1].is_digit()) {
             val, steps := parse_numeric_value(content, p.idx)
+
             if val in ['1.0e+', '1.0e-', '1.0e', '1eE2', '0e', '0e+', '0E', '0E+', '0.e1', '0.1.2', '0.3e', '0.3e+', '+1', '-01', '-1.0.', '0e+-1', '-012', '1.2a-3', '-2.', '2.e+3', '2.e-3', '2.e3', '9.e+'] {
-                println('json: number not allowed')
-                exit(1)
+                return error('json: number not allowed')
+            }
+
+            if val.ends_with('.') || val.ends_with('+') || val.ends_with('-') {
+                return error('json: invalid number')
             }
 
             if is_float(val) {
@@ -306,8 +323,9 @@ fn (p mut Parser) parse_array(key string) ?Array {
             } else {
                 arr.values << val.int()
             }
+            
             p.idx += steps
-            prev_tok = content[p.idx]
+            prev_tok = content[p.idx-1]
             curr_idx++
             continue
         }
@@ -321,7 +339,7 @@ fn (p mut Parser) parse_array(key string) ?Array {
                 continue
             }
 
-            if p.is_true(p.idx) || p.is_false(p.idx) {
+            if p.is_bool(p.idx) {
                 bol, steps := parse_bool(content, p.idx)
                 arr.values << bol
                 p.idx += steps
@@ -331,8 +349,7 @@ fn (p mut Parser) parse_array(key string) ?Array {
             }
         }
 
-        println('json: invalid character from array')
-        exit(1)
+        return error('json: invalid character from array')
         
         if p.idx < content.len-1 {
             p.idx++
@@ -353,7 +370,6 @@ fn new_parser(content string) Parser {
 
 fn (p mut Parser) parse() ?Field {
     content := p.content
-
     for {
         tok := content[p.idx]
         if tok.is_space() {
@@ -376,7 +392,7 @@ fn (p mut Parser) parse() ?Field {
                         p.parse_mode = .number
                         break
                     }
-                    if p.is_true(p.idx) || p.is_false(p.idx) { 
+                    if p.is_bool(p.idx) { 
                         p.parse_mode = .bool
                         break
                     }
@@ -390,20 +406,42 @@ fn (p mut Parser) parse() ?Field {
     match p.parse_mode {
         .object {
             obj := p.parse_object('') or { return error(err) }
-            p.parsed = obj
+            b := obj
+            p.parsed = b
+            p.idx--
         }
         .array {
+            if !p.content.trim_space().ends_with(']') {
+                return error('json: unterminated array')
+            }
             arr := p.parse_array('') or { return error(err) }
-            p.parsed = arr
+            z := arr
+            p.parsed = z
+            if p.content[p.content.len-2] == `]` && p.content[p.content.len-1] == `]` { p.idx-- }
         }
-        .number { p.parsed = p.parse_number_field('Number_0') }
-        .string { p.parsed = p.parse_string_field('String_0') }
-        .bool { p.parsed = p.parse_bool_field('Bool_0') }
+        .number { 
+            p.parsed = p.parse_number_field('Number_0')
+            if p.content.len >= 2 && !p.content[p.content.len-1].is_digit() { p.idx-- }
+        }
+        .string {
+            p.parsed = p.parse_string_field('String_0')
+            p.idx--
+        }
+        .bool {
+            p.parsed = p.parse_bool_field('Bool_0')
+            p.idx++
+        }
         .null { p.parsed = p.parse_null_field('Null_0') }
         .invalid {
-            println('invalid JSON.')
-            exit(1)
+            return error('invalid JSON')
         }
+    }
+
+    println('stopped at idx $p.idx')
+    remaining := (p.content.len-1) - p.idx
+    println(remaining)
+    if remaining >= 1 {
+        return error('json: unexpected character "${p.content[p.idx+1].str()}"')
     }
 
     return p.parsed
@@ -411,7 +449,7 @@ fn (p mut Parser) parse() ?Field {
 
 pub fn decode(content string) ?Field {
     mut p := new_parser(content)
-    p.parse() or { return error('Error decoding JSON') }
+    p.parse() or { return error(err) }
 
     return p.parsed
 }

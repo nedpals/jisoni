@@ -19,17 +19,18 @@ pub fn (arr Array) str() string {
     return arr.values.str()
 }
 
-pub fn (x Field) json_str() string {
-    mut out := '"' + x.key() + '": '
+fn (x Field) json_kv_str() string {
+    mut g := strings.new_builder(20000)
+    g.write('"${x.key()}":')
 
     match x {
-        String { out += '"${it.value}"' }
-        Object { out += it.str() }
-        Array { out += ' ${it.values.str()}' }
-        else { out += x.str() }
+        String { g.write('"${it.value}"') }
+        Object { g.write(it.str()) }
+        Array { g.write(it.values.str()) }
+        else { g.write(x.str()) }
     }
 
-    return out
+    return g.str()
 }
 
 pub fn (obj Object) str() string {
@@ -38,11 +39,9 @@ pub fn (obj Object) str() string {
     obj_keys := obj.fields.keys()
     for i, k in obj_keys {
         f := obj.fields[k]
-        str := f.json_str()
-        for line in str.split_into_lines() {
-            g.write(line)
-        }
-        if i < obj_keys.len-1 { g.write(', ') }
+        str := f.json_kv_str()
+        for line in str.split_into_lines() { g.write(line) }
+        if i < obj_keys.len-1 { g.write(',') }
     }
     g.write('}')
     return g.str()
@@ -74,7 +73,6 @@ pub fn (av []ArrayValue) str() string {
     }
 
     g.write(']')
-
     return g.str()
 }
 
@@ -84,12 +82,9 @@ pub fn (xs []Field) str() string {
 
     for i, x in xs {
         g.write(x.str())
-        if i < xs.len-1 {
-            g.write(', ')
-        }
+        if i < xs.len-1 { g.write(',') }
     }
 
     g.write(']')
-
     return g.str()
 }

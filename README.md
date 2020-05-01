@@ -42,13 +42,16 @@ fn main() {
 - Encoding
 - Performance
 - Testing (Especially on JSON Test Suite)
+- Error Messages
 - Parsing errors (Avoid correcting malformed/invalid ones!)
 
 ## License
 Licensed under [MIT](LICENSE)
 
 ## Testing
-TODO!
+1. Clone the [JSON Test Suite repository](https://github.com/nst/JSONTestSuite) inside the cloned `jisoni` folder.
+2. Run `test.sh` (for Unix systems) or `test.bat` (for Windows)
+3. Open `parsing.html` inside the `results/` folder of the JSON test suite. 
 
 ## Copyright
 (c) 2020- Ned Palacios

@@ -29,6 +29,10 @@ fn parse_str(content string, start_idx int) (string, int) {
     for {
         tok := content[i]
         // if i == content.len-2 { break }
+        if int(tok) == 10 { 
+            i++
+            continue
+        }
 
         if tok == `"` {
             if txt.len == 0 {
@@ -57,26 +61,7 @@ fn parse_str(content string, start_idx int) (string, int) {
     }
 
     steps := i - start_idx
-    return txt.trim_space(), steps
-}
-
-fn check_if_null(content string, start_idx int) (bool, int) {
-    mut i := start_idx
-    mut value := ''
-
-    for {
-        tok := content[i]
-
-        if tok in [`,`, `]`, `}`] || i == content.len-1 {
-            break
-        }
-
-        value += tok.str()
-        i++
-    }
-
-    steps := i - start_idx
-    return value == 'null', steps
+    return txt, steps
 }
 
 fn parse_bool(content string, start_idx int) (bool, int) {

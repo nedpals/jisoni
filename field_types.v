@@ -5,7 +5,6 @@ pub type ArrayValue = string | int | f64 | Object | Array | bool | Null
 
 pub struct Undefined {
     key string
-    undefined bool = true
 }
 
 pub struct String {

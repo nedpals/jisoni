@@ -17,7 +17,7 @@ fn (f Field) get(key string) Field {
         Object { return it.get(key) }
         Array { return it.get(key.int()) }
         ArrayValue { return it.get(key) }
-        else { return Undefined{ key: key } }
+        else { return Undefined{key} }
     }
 }
 
@@ -25,7 +25,7 @@ fn (av ArrayValue) get(key string) Field {
     match av {
         Object { return it.get(key) }
         Array { return it.get(key.int()) }
-        else { return Undefined{ key: key } }
+        else { return Undefined{key} }
     }
 }
 

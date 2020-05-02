@@ -1,4 +1,4 @@
-module main
+module jisoni
 
 enum ParseMode {
     object
@@ -200,10 +200,11 @@ fn (p mut Parser) parse_object(key string) ?Object {
                 key_set = false
                 prev_tok = content[p.idx]
                 continue
-            } else {
-                if p.content[p.idx].is_space() {
-                    p.idx++
-                }
+            }
+
+            if p.content[p.idx].is_space() && (p.content[p.idx+1] in [`,`, `}`] || p.content[p.idx+1].is_space()) {
+                p.idx++
+                continue
             }
 
             if p.content[p.idx] !in [`,`, `}`] {
@@ -232,16 +233,14 @@ fn (p mut Parser) parse_array(key string) ?Array {
             return error('json: colons are not allowed inside arrays.')
         }
 
+        p.has_comments(p.idx) or { return error(err) }
+
         if tok == `[` && prev_tok in [`[`, `,`] {
             if arr.values.len == 0 { p.empty_nested_array_count++ }
             arr2 := p.parse_array(curr_idx.str()) or { return error(err) }
             arr.values << arr2
             curr_idx++
             continue
-        }
-
-        if tok == `/` && p.content[p.idx+1] == `*` {
-            return error('json: comments are not allowed.')
         }
 
         if tok == `]` {
@@ -310,6 +309,16 @@ fn (p mut Parser) parse_array(key string) ?Array {
         if tok.is_digit() || (tok in [`-`, `+`] && content[p.idx+1].is_digit()) {
             val, steps := parse_numeric_value(content, p.idx)
 
+            // invalid numbers
+            // starts with 1.0e
+            // 0E/0e
+            // 0.3e
+            // ends with dot
+            // two decimal places
+            // 2.e
+            // +1
+            // -01
+            // 0e
             if val in ['1.0e+', '1.0e-', '1.0e', '1eE2', '0e', '0e+', '0E', '0E+', '0.e1', '0.1.2', '0.3e', '0.3e+', '+1', '-01', '-1.0.', '0e+-1', '-012', '1.2a-3', '-2.', '2.e+3', '2.e-3', '2.e3', '9.e+'] {
                 return error('json: number not allowed')
             }
@@ -350,12 +359,6 @@ fn (p mut Parser) parse_array(key string) ?Array {
         }
 
         return error('json: invalid character from array')
-        
-        if p.idx < content.len-1 {
-            p.idx++
-        } else {
-            break
-        }
     }
 
     return arr
@@ -408,7 +411,7 @@ fn (p mut Parser) parse() ?Field {
             obj := p.parse_object('') or { return error(err) }
             b := obj
             p.parsed = b
-            p.idx--
+            if p.content[p.content.len-1] != `}` || !p.content[p.content.len-1].is_space() { p.idx-- }
         }
         .array {
             if !p.content.trim_space().ends_with(']') {
@@ -437,7 +440,6 @@ fn (p mut Parser) parse() ?Field {
         }
     }
 
-    println('stopped at idx $p.idx')
     remaining := (p.content.len-1) - p.idx
     println(remaining)
     if remaining >= 1 {
@@ -449,7 +451,5 @@ fn (p mut Parser) parse() ?Field {
 
 pub fn decode(content string) ?Field {
     mut p := new_parser(content)
-    p.parse() or { return error(err) }
-
-    return p.parsed
+    return p.parse()
 }

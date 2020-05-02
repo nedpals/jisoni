@@ -1,4 +1,4 @@
-module main
+module jisoni
 
 pub type Field = String | Array | Int | Float | Bool | Null | Object | Undefined | ArrayValue
 pub type ArrayValue = string | int | f64 | Object | Array | bool | Null

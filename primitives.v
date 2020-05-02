@@ -1,4 +1,4 @@
-module main
+module jisoni
 
 fn parse_numeric_value(content string, start_idx int) (string, int) {
     mut i := start_idx

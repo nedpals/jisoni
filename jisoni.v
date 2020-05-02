@@ -1,4 +1,4 @@
-module main
+module jisoni
 
 fn (obj Object) get(key string) Field {
     return obj.fields[key]

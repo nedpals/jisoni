@@ -327,6 +327,10 @@ fn (p mut Parser) parse_array(key string) ?Array {
                 return error('json: invalid number')
             }
 
+            if val[val.len-1].is_letter() && val[val.len-2].is_letter() {
+                return error('json: invalid number')
+            }
+
             if is_float(val) {
                 arr.values << val.f64()
             } else {

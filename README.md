@@ -1,37 +1,8 @@
 # JISONI
 A work-in-progress JSON parser written on pure V. It aims to [replace CJSON](https://github.com/vlang/v/issues/309) and provides a cleaner and simple-to-use API for encoding and decoding JSON.
 
-## Proposed API
-```v
-module main
-
-import jisoni
-import http
-
-fn main() {
-    // Decoding
-    resp := http.get('https://example.com')?
-    person := jisoni.decode(resp.text)?
-
-    //Navigating
-    name := person.get('name')
-    age := person.get('age')
-
-    //Encoding
-    me := Jisoni.Object{'0', [
-        Jisoni.String{'name', 'Ned Poolz'}
-        Jisoni.Int('age', 18)
-        Jisoni.Array{'interests', ['rock', 'papers', 'scissors']}
-        Jisoni.Object{'Pets', [
-            Jisoni.String{'Sam': 'Maltese'}
-        ]}
-    ]} 
-    meJson := jisoni.encode(me)
-    prinln(meJson)
-    //{"name":"Ned Poolz","age":18,"interests": ["rock", "papers", "scissors"],"pets":{"Sam":"Maltese"}}
-
-}
-```
+## Parsing Test
+![parsing test](parsing_test.jpg)
 
 ## Demo
 ![demo](demo.png)

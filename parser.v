@@ -1,4 +1,4 @@
-module jisoni
+module main
 
 enum ParseMode {
     object

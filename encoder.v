@@ -1,4 +1,4 @@
-module jisoni
+module main
 import strings
 
 pub fn (x Field) str() string {

@@ -20,9 +20,8 @@ A work-in-progress JSON parser written on pure V. It aims to [replace CJSON](htt
 Licensed under [MIT](LICENSE)
 
 ## Testing
-1. Clone the [JSON Test Suite repository](https://github.com/nst/JSONTestSuite) inside the cloned `jisoni` folder.
-2. Run `test.sh` (for Unix systems) or `test.bat` (for Windows)
-3. Open `parsing.html` inside the `results/` folder of the JSON test suite. 
+1. Run `test.sh` (for Unix systems) or `test.bat` (for Windows)
+2. Open `parsing.html` inside the `results/` folder of the JSON test suite. 
 
 ## Copyright
 (c) 2020- Ned Palacios

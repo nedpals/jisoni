@@ -8,13 +8,13 @@ A work-in-progress JSON parser written on pure V. It aims to [replace CJSON](htt
 ![demo](demo.png)
 
 ## TODO
-- Function Organization
-- JSON Tree Navigation
-- Encoding
-- Performance
+- ~~Function Organization~~
+- ~~JSON Tree Navigation~~
+- ~~Encoding~~
+- ~~Performance~~ (Not an important issue for now) 
 - Testing (Especially on JSON Test Suite)
-- Error Messages
-- Parsing errors (Avoid correcting malformed/invalid ones!)
+- Error Messages (adding line numbers to message is WIP)
+- ~~Parsing errors (Avoid correcting malformed/invalid ones!)~~
 
 ## License
 Licensed under [MIT](LICENSE)

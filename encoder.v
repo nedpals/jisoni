@@ -38,6 +38,12 @@ pub fn (f Field) str() string {
 		f64 {
 			return (*it).str()
 		}
+		any_int {
+			return (*it).str()
+		}
+		any_float {
+			return (*it).str()
+		}
 		bool {
 			return (*it).str()
 		}

@@ -2,7 +2,7 @@
 A work-in-progress JSON parser written on pure V. It aims to [replace CJSON](https://github.com/vlang/v/issues/309) and provides a cleaner and simple-to-use API for encoding and decoding JSON.
 
 ## Parsing Test
-![parsing test](parsing_test.jpg)
+![parsing test](parsing_test.png)
 
 ## Demo
 ![demo](demo.png)

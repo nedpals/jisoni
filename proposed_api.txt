@@ -6,23 +6,39 @@ import http
 fn main() {
     // Decoding
     resp := http.get('https://example.com') or {}
-    person := jisoni.decode(resp.text)
+
+    // raw decode
+    person := jisoni.raw_decode(resp.text) or {
+        panic(err)
+    }
+
+    // to a type
+    person2 := jisoni.decode<Person>(resp.text) or {
+        panic(err)
+    }
 
     //Navigating
-    name := person.get('name')
-    age := person.get('age')
+    name := person.as_map()['name']
+    age := person.as_map()['age']
 
     //Encoding
-    me := Jisoni.Object{'0', [
-        Jisoni.String{'name', 'Ned Poolz'}
-        Jisoni.Int('age', 18)
-        Jisoni.Array{'interests', ['rock', 'papers', 'scissors']}
-        Jisoni.Object{'Pets', [
-            Jisoni.String{'Sam': 'Maltese'}
-        ]}
-    ]} 
-    meJson := jisoni.encode(me)
-    prinln(meJson)
+    mut me := map[string]Field
+    me['name'] = 'Ned Poolz'
+    me['age'] = 18
+
+    mut arr := []Field{}
+    arr << 'rock'
+    arr << 'papers'
+    arr << Null{}
+    arr << 12
+
+    me['interests'] = arr
+
+    mut pets := map[string]Field
+    pets['Sam'] = 'Maltese Shitzu' 
+    me['pets'] = pets
+
+    println(me.str())
     //{"name":"Ned Poolz","age":18,"interests": ["rock", "papers", "scissors"],"pets":{"Sam":"Maltese"}}
 
 }

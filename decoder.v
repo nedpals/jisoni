@@ -1,5 +1,7 @@
 module main
 
+import strings
+import strconv
 import v.scanner
 import v.token
 
@@ -193,6 +195,7 @@ fn (mut p Parser) decode_value() ?Field {
 }
 
 fn (mut p Parser) decode_string() ?Field {
+	mut strwr := strings.new_builder(200)
 	mut fi := Field{}
 	for i := 0; i < p.tok.lit.len; i++ {
 		// s := p.tok.lit[i].str()
@@ -207,19 +210,28 @@ fn (mut p Parser) decode_string() ?Field {
 
 		if i+1 < p.tok.lit.len && p.tok.lit[i] == 92 {
 			peek := p.tok.lit[i+1]
-			if peek !in [`b`, `f`, `n`, `r`, `t`, `u`, `\\`, `"`, `/`] {
-				return error('invalid backslash escape')
-			} else {
+			if peek in [`b`, `f`, `n`, `r`, `t`, `u`, `\\`, `"`, `/`] {
 				if peek == `u` {
 					if i+5 < p.tok.lit.len {
-						i += 4
+						// \uFFFE
+						// cp----
+						// println(p.tok.lit[i+2..i+6])
+						hex_val := strconv.parse_int(p.tok.lit[i+2..i+6], 16, 0)
+						// println(p.tok.lit[i+2..i+6])
+						strwr.write_b(byte(hex_val))
+						i += 5
+						// println(p.tok.lit[i])
+						continue
 					} else {
 						return error('incomplete unicode escape.')
 					}
 				}
 
 				i++
+				strwr.write_b(p.tok.lit[i])
 				continue
+			} else {
+				return error('invalid backslash escape')
 			}
 
 			if peek == 85 {
@@ -230,8 +242,10 @@ fn (mut p Parser) decode_string() ?Field {
 				return error('unicode endpoint not allowed.')
 			}
 		}
+
+		strwr.write_b(p.tok.lit[i])
 	}
-	fi = p.tok.lit
+	fi = strwr.str()
 	return fi
 }
 

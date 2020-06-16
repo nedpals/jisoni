@@ -26,9 +26,10 @@ fn main() {
     // Usage: ./[exec name] <url with json content>
     url := os.args[1]
     resp := os.read_file(url) or { panic('error') }
-    raw_decode(resp) or {
+    res := raw_decode(resp) or {
         eprintln(err)
         exit(1)
     }
+    println(res)
     exit(0)
 }

@@ -5,17 +5,13 @@ import http
 
 fn main() {
     // Decoding
-    resp := http.get('https://example.com') or {}
+    resp := http.get('https://example.com')?
 
     // raw decode
-    person := jisoni.raw_decode(resp.text) or {
-        panic(err)
-    }
+    person := jisoni.raw_decode(resp.text)?
 
     // to a type
-    person2 := jisoni.decode<Person>(resp.text) or {
-        panic(err)
-    }
+    person2 := jisoni.decode<Person>(resp.text)?
 
     //Navigating
     name := person.as_map()['name']

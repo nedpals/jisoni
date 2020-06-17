@@ -45,9 +45,6 @@ fn main() {
 }
 ```
 
-## Demo
-![demo](demo.png)
-
 ## TODO
 - ~~Function Organization~~
 - ~~JSON Tree Navigation~~

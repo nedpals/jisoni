@@ -28,8 +28,7 @@ mut:
 	n_tok token.Token
 	nn_tok token.Token
 	mode ParseMode = .invalid
-	ar_n_level int = 0
-	ob_n_level int = 0
+	n_level int = 0
 }
 
 fn (mut p Parser) next() {
@@ -120,22 +119,14 @@ fn (mut p Parser) decode_value() ?Field {
 	mut fi := Field{}
 
 	if p.tok.kind == .lsbr && p.n_tok.kind == .lcbr {
-		p.ar_n_level++
+		p.n_level++
 	}
 
-	if p.p_tok.kind == p.tok.kind {
-		match p.tok.kind {
-			.lsbr {
-				p.ar_n_level++
-			}
-			.rsbr {
-				p.ob_n_level++
-			}
-			else {}
-		}
+	if p.p_tok.kind == p.tok.kind && p.tok.kind == .lsbr {
+		p.n_level++
 	}
 
-	if p.ar_n_level == 500 || p.ob_n_level == 500 {
+	if p.n_level == 500 {
 		return error('reached max nesting level.')
 	}
 

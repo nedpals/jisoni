@@ -5,7 +5,7 @@ import strconv
 import v.scanner
 import v.token
 
-pub type Field = string | int | f64 | any_int | any_float | bool | Null | []Field | map[string]Field
+pub type Any = string | int | f64 | any_int | any_float | bool | Null | []Any | map[string]Any
 
 struct Null {}
 
@@ -124,8 +124,8 @@ fn (mut p Parser) detect_parse_mode() {
 	}
 }
 
-fn (mut p Parser) decode_value() ?Field {
-	mut fi := Field{}
+fn (mut p Parser) decode_value() ?Any {
+	mut fi := Any{}
 
 	if p.tok.kind == .lsbr && p.n_tok.kind == .lcbr {
 		p.n_level++
@@ -159,17 +159,17 @@ fn (mut p Parser) decode_value() ?Field {
 			fi = item
 		}
 		.key_true {
-			fi = Field(true)
+			fi = Any(true)
 		}
 		.key_false {
-			fi = Field(false)
+			fi = Any(false)
 		}
 		.name {
 			if p.tok.lit != 'null' {
 				return error('unknown identifier `$p.tok.lit`')
 			}
 
-			fi = Field(Null{})
+			fi = Any(Null{})
 		}
 		.string {
 			if p.is_singlequote() {
@@ -205,9 +205,9 @@ fn (mut p Parser) decode_value() ?Field {
 	return fi
 }
 
-fn (mut p Parser) decode_string() ?Field {
+fn (mut p Parser) decode_string() ?Any {
 	mut strwr := strings.new_builder(200)
-	mut fi := Field{}
+	mut fi := Any{}
 	for i := 0; i < p.tok.lit.len; i++ {
 		// s := p.tok.lit[i].str()
 		// println('$i $s')
@@ -259,7 +259,7 @@ fn (mut p Parser) decode_string() ?Field {
 	return fi
 }
 
-fn (mut p Parser) decode_number() ?Field {
+fn (mut p Parser) decode_number() ?Any {
 	src := p.scanner.text
 	mut tl := p.tok.lit
 	mut is_fl := false
@@ -296,11 +296,11 @@ fn (mut p Parser) decode_number() ?Field {
 		tl = '-' + tl
 	}
 
-	return if is_fl { Field(tl.f64()) } else { Field(tl.int()) }
+	return if is_fl { Any(tl.f64()) } else { Any(tl.int()) }
 }
 
-fn (mut p Parser) decode_array() ?Field {
-	mut items := []Field{}
+fn (mut p Parser) decode_array() ?Any {
+	mut items := []Any{}
 	p.next()
 	for p.tok.kind != .rsbr {
 		if p.tok.kind == .eof {
@@ -324,11 +324,11 @@ fn (mut p Parser) decode_array() ?Field {
 		return error('[decode_array] unknown token `$p.tok.lit`')
 	}
 
-	return Field(items)
+	return Any(items)
 }
 
-fn (mut p Parser) decode_object() ?Field {
-	mut fields := map[string]Field
+fn (mut p Parser) decode_object() ?Any {
+	mut fields := map[string]Any
 	mut cur_key := ''
 
 	p.next()
@@ -374,5 +374,5 @@ fn (mut p Parser) decode_object() ?Field {
 
 		return error('[decode_object] unknown token `$p.tok.lit`')
 	}
-	return Field(fields)
+	return Any(fields)
 }

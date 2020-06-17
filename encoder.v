@@ -1,7 +1,7 @@
 module jisoni
 import strings
 
-pub fn (flds map[string]Field) str() string {
+pub fn (flds map[string]Any) str() string {
 	mut wr := strings.new_builder(200)
 	wr.write('{')
 	mut i := 0
@@ -15,7 +15,7 @@ pub fn (flds map[string]Field) str() string {
 	return wr.str()
 }
 
-pub fn (flds []Field) str() string {
+pub fn (flds []Any) str() string {
 	mut wr := strings.new_builder(200)
 	wr.write('[')
 	for i, v in flds {
@@ -26,7 +26,7 @@ pub fn (flds []Field) str() string {
 	return wr.str()
 }
 
-pub fn (f Field) str() string {
+pub fn (f Any) str() string {
 	match f {
 		string {
 			str := *it
@@ -47,7 +47,7 @@ pub fn (f Field) str() string {
 		bool {
 			return (*it).str()
 		}
-		map[string]Field {
+		map[string]Any {
 			return (*it).str()
 		}
 		Null {
@@ -55,7 +55,7 @@ pub fn (f Field) str() string {
 		}
 		else {
 			if typeof(f) == 'array_Field' {
-				arr := f as []Field
+				arr := f as []Any
 				return (*arr).str()
 			}
 			return ''

@@ -23,11 +23,11 @@ fn main() {
     age := person.as_map()['age']
 
     //Encoding
-    mut me := map[string]Field
+    mut me := map[string]jisoni.Any
     me['name'] = 'Ned Poolz'
     me['age'] = 18
 
-    mut arr := []Field{}
+    mut arr := []jisoni.Any{}
     arr << 'rock'
     arr << 'papers'
     arr << Null{}
@@ -35,7 +35,7 @@ fn main() {
 
     me['interests'] = arr
 
-    mut pets := map[string]Field
+    mut pets := map[string]jisoni.Any
     pets['Sam'] = 'Maltese Shitzu' 
     me['pets'] = pets
 

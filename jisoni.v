@@ -28,6 +28,10 @@ pub fn decode<T>(src string) T {
 	return typ.from_json(res)
 }
 
+pub fn encode<T>(typ T) string {
+	return typ.to_json()
+}
+
 pub fn null() Null {
 	return Null{}
 }

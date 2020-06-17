@@ -24,7 +24,7 @@ fn main() {
     age := person['age'].as_int() // 19
     pi := person['pi'].as_f() // 3.14.... 
 
-    //Encoding
+    //Constructing an `Any` type
     mut me := map[string]jisoni.Any
     me['name'] = 'Ned Poolz'
     me['age'] = 18
@@ -41,13 +41,16 @@ fn main() {
     pets['Sam'] = 'Maltese Shitzu' 
     me['pets'] = pets
 
+    // Stringify to JSON
     println(me.str())
     //{"name":"Ned Poolz","age":18,"interests": ["rock", "papers", "scissors"],"pets":{"Sam":"Maltese"}}
 
+    // Encode a struct/type to JSON
+    encoded_json := jisoni.encode<Person>(person2)
 }
 ```
-## Using `decode<T>`
-In order to use the `decode<T>` function, you need to explicitly define a `from_json` method from that type you're going to target in which it accepts a `jisoni.Any` argument and inside of it you to map the fields you're going to put into the type.
+## Using `decode<T>` and `encode<T>`
+In order to use the `decode<T>` and `encode<T>` function, you need to explicitly define two methods: `from_json` and `to_json`. `from_json` accepts a `jisoni.Any` argument and inside of it you need to map the fields you're going to put into the type. As for `to_json` method, you just need to map the values into `jisoni.Any` and turn it into a string.
 
 ```v
 struct Person {
@@ -57,7 +60,7 @@ mut:
     pets []string
 }
 
-fn (mut p Person) from_json(f Field) Person {
+fn (mut p Person) from_json(f Any) Person {
     obj := f.as_map()
     for k, v in obj {
         match k {
@@ -70,11 +73,20 @@ fn (mut p Person) from_json(f Field) Person {
     return p
 }
 
+fn (p Person) to_json() string {
+    mut obj := map[string]Any
+    obj['name'] = p.name
+    obj['age'] = p.age
+    obj['pets'] = p.pets
+    return obj.str()
+}
+
 fn main() {
     resp := os.read_file('./person.json')?
-    person := decode<Person>(resp)
+    person := jisoni.decode<Person>(resp)
     println(person) // Person{name: 'Bob', age: 28, pets: ['Floof']}
-    exit(0)
+    person_json := jisoni.encode<Person>(person)
+    println(person_json) // {"name": "Bob", "age": 28, "pets": ["Floof"]}
 }
 ```
 
@@ -85,7 +97,7 @@ Jisoni cannot use struct tags just like when you use the `json` module. However,
 Jisoni have a `null` value for differentiating an undefined value and a null value. Use `is` for verifying the field you're using is a null.
 
 ```v
-fn (mut p Person) from_json(f Field) Person {
+fn (mut p Person) from_json(f Any) Person {
     obj := f.as_map()
     
     if obj['age'] is jisoni.Null {
@@ -97,21 +109,27 @@ fn (mut p Person) from_json(f Field) Person {
 }
 ```
 
-### Custom Names
+### Custom field names
 In `json`, you can specify the field name you're mapping into the struct field by specifying a `json:` tag. In Jisoni, just simply cast the base field into a map (`as_map()`) and get the value of the field you wish to put into the struct/type.
 
 ```v
-fn (mut p Person) from_json(f Field) Person {
+fn (mut p Person) from_json(f jisoni.Any) Person {
     obj := f.as_map()
-    
     p.name = obj['nickname'].as_str()
-
     return p
 }
 ```
 
+```v
+fn (mut p Person) to_json() string {
+    obj := f.as_map()
+    obj['nickname'] = p.name
+    return obj.str()
+}
+```
+
 ### Undefined Values
-Getting undefined values has the same behavior as regular V types. If you're casting a base field into `map[string]Field` and fetch an undefined entry/value, it simply returns empty. As for the `[]Field`, it returns an index error.
+Getting undefined values has the same behavior as regular V types. If you're casting a base field into `map[string]Any` and fetch an undefined entry/value, it simply returns empty. As for the `[]Any`, it returns an index error.
 
 ## Casting a value to an incompatible type
 Jisoni provides methods for turning `Any` types into usable types. The following list shows the possible outputs when casting a value to an incompatible type.

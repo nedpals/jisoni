@@ -56,8 +56,19 @@ fn new_parser(srce string) Parser {
 	return p
 }
 
-fn (p Parser) is_linefeed() ?bool {
-	prev_tok_pos := p.p_tok.pos + p.p_tok.len
+fn check_valid_hex(str string) ?bool {
+	if str.len != 4 {
+		return error('hex string must be 4 characters')
+	}
+
+	for l in str {
+		if l.is_hex_digit() { continue }
+		return error('string not a hex digit.')
+	}
+
+	return true
+}
+
 	if prev_tok_pos < p.scanner.text.len && p.scanner.text[prev_tok_pos] == 0x0c {
 		return error('formfeed not allowed.')
 	}
@@ -213,14 +224,13 @@ fn (mut p Parser) decode_string() ?Field {
 			if peek in [`b`, `f`, `n`, `r`, `t`, `u`, `\\`, `"`, `/`] {
 				if peek == `u` {
 					if i+5 < p.tok.lit.len {
-						// \uFFFE
-						// cp----
-						// println(p.tok.lit[i+2..i+6])
-						hex_val := strconv.parse_int(p.tok.lit[i+2..i+6], 16, 0)
-						// println(p.tok.lit[i+2..i+6])
+						codepoint := p.tok.lit[i+2..i+6]
+						check_valid_hex(codepoint) or {
+							return error(err)
+						}
+						hex_val := strconv.parse_int(codepoint, 16, 0)
 						strwr.write_b(byte(hex_val))
 						i += 5
-						// println(p.tok.lit[i])
 						continue
 					} else {
 						return error('incomplete unicode escape.')

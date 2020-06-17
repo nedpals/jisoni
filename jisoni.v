@@ -28,8 +28,9 @@ pub fn decode<T>(src string) T {
 	return typ.from_json(res)
 }
 
-pub fn (f Field) as_map() map[string]Field {
-	mut mp := map[string]Field
+pub fn null() Null {
+	return Null{}
+}
 
 pub fn (f Any) as_map() map[string]Any {
 	mut mp := map[string]Any

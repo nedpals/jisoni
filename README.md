@@ -30,7 +30,7 @@ fn main() {
     mut arr := []jisoni.Any{}
     arr << 'rock'
     arr << 'papers'
-    arr << Null{}
+    arr << jisoni.null()
     arr << 12
 
     me['interests'] = arr

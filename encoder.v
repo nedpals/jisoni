@@ -58,7 +58,7 @@ pub fn (f Field) str() string {
 				arr := f as []Field
 				return (*arr).str()
 			}
-			return 'undefined'
+			return ''
 		}
 	}
 }

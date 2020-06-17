@@ -5,10 +5,9 @@ import strconv
 import v.scanner
 import v.token
 
-type Field = string | int | f64 | any_int | any_float | bool | Null | Undefined | []Field | map[string]Field
+type Field = string | int | f64 | any_int | any_float | bool | Null | []Field | map[string]Field
 
 struct Null {}
-struct Undefined {}
 
 enum ParseMode {
     array

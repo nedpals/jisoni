@@ -1,6 +1,6 @@
-module main
+// module main
 
-import os
+// import os
 
 // struct Person {
 // mut:
@@ -22,14 +22,14 @@ import os
 //     return p
 // }
 
-fn main() {
-    // Usage: ./[exec name] <url with json content>
-    url := os.args[1]
-    resp := os.read_file(url) or { panic('error') }
-    res := raw_decode(resp) or {
-        eprintln(err)
-        exit(1)
-    }
-    println(res)
-    exit(0)
-}
+// fn main() {
+//     // Usage: ./[exec name] <url with json content>
+//     url := os.args[1]
+//     resp := os.read_file(url) or { panic('error') }
+//     res := raw_decode(resp) or {
+//         eprintln(err)
+//         exit(1)
+//     }
+//     println(res)
+//     exit(0)
+// }

@@ -24,7 +24,27 @@
 			</div>
 		</div>
 		<nav class="content hidden">
-			<ul><li><a href="#Any">Any</a>        <ul>
+			<ul><li class="open"><a href="#">&map[string]Any</a>        <ul>
+<li><a href="#&map[string]Any.insert_str">insert_str</a></li>
+<li><a href="#&map[string]Any.insert_int">insert_int</a></li>
+<li><a href="#&map[string]Any.insert_f">insert_f</a></li>
+<li><a href="#&map[string]Any.insert_null">insert_null</a></li>
+<li><a href="#&map[string]Any.insert_bool">insert_bool</a></li>
+<li><a href="#&map[string]Any.insert_map">insert_map</a></li>
+<li><a href="#&map[string]Any.insert_arr">insert_arr</a></li>
+</ul>
+</li>
+<li class="open"><a href="#">&[]Any</a>        <ul>
+<li><a href="#&[]Any.insert_str">insert_str</a></li>
+<li><a href="#&[]Any.insert_int">insert_int</a></li>
+<li><a href="#&[]Any.insert_f">insert_f</a></li>
+<li><a href="#&[]Any.insert_null">insert_null</a></li>
+<li><a href="#&[]Any.insert_bool">insert_bool</a></li>
+<li><a href="#&[]Any.insert_map">insert_map</a></li>
+<li><a href="#&[]Any.insert_arr">insert_arr</a></li>
+</ul>
+</li>
+<li class="open"><a href="#Any">Any</a>        <ul>
 <li><a href="#Any.str">str</a></li>
 <li><a href="#Any.as_map">as_map</a></li>
 <li><a href="#Any.as_str">as_str</a></li>
@@ -33,11 +53,29 @@
 <li><a href="#Any.as_arr">as_arr</a></li>
 </ul>
 </li>
-<li><a href="#Null">Null</a></li>
-<li><a href="#raw_decode">raw_decode</a></li>
-<li><a href="#decode">decode</a></li>
-<li><a href="#encode">encode</a></li>
-<li><a href="#null">null</a></li>
+<li class="open"><a href="#Null">Null</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#">map[string]Any</a>        <ul>
+<li><a href="#map[string]Any.str">str</a></li>
+</ul>
+</li>
+<li class="open"><a href="#">[]Any</a>        <ul>
+<li><a href="#[]Any.str">str</a></li>
+</ul>
+</li>
+<li class="open"><a href="#raw_decode">raw_decode</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#decode">decode</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#encode">encode</a>        <ul>
+</ul>
+</li>
+<li class="open"><a href="#null">null</a>        <ul>
+</ul>
+</li>
 
 </ul>
 </nav>
@@ -188,12 +226,68 @@ fn main() {
 2. Open `parsing.html` inside the `results/` folder of the JSON test suite.  -->
 <h2>Copyright</h2>
 <p>(c) 2020- Ned Palacios</p></section>
+<section id="&map[string]Any.insert_str" class="doc-node">
+<div class="title"><h2>&map[string]Any.insert_str <a href="#&map[string]Any.insert_str">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni/builder.v#L4"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> obj <span class="token builtin">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span> <span class="token function">insert_str</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> val <span class="token builtin">string</span><span class="token punctuation">)</span></code></pre>
+<p>Inserts a string into the map.</p>
+</section>
+<section id="&map[string]Any.insert_int" class="doc-node">
+<div class="title"><h2>&map[string]Any.insert_int <a href="#&map[string]Any.insert_int">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni/builder.v#L10"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> obj <span class="token builtin">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span> <span class="token function">insert_int</span><span class="token punctuation">(</span>key <span class="token builtin">string</span><span class="token punctuation">,</span> val <span class="token builtin">int</span><span class="token punctuation">)</span></code></pre>
+<p>Inserts an int into the map.</p>
+</section>
+<section id="&map[string]Any.insert_f" class="doc-node">
+<div class="title"><h2>&map[string]Any.insert_f <a href="#&map[string]Any.insert_f">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni/builder.v#L14"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> obj <span class="token builtin">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span> <span class="token function">insert_f</span><span class="token punctuation">(</span>key <span class="token builtin">string</span><span class="token punctuation">,</span> val <span class="token builtin">f64</span><span class="token punctuation">)</span></code></pre>
+<p>Inserts a float into the map.</p>
+</section>
+<section id="&map[string]Any.insert_null" class="doc-node">
+<div class="title"><h2>&map[string]Any.insert_null <a href="#&map[string]Any.insert_null">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni/builder.v#L18"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> obj <span class="token builtin">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span> <span class="token function">insert_null</span><span class="token punctuation">(</span>key <span class="token builtin">string</span><span class="token punctuation">)</span></code></pre>
+<p>Inserts a null into the map.</p>
+</section>
+<section id="&map[string]Any.insert_bool" class="doc-node">
+<div class="title"><h2>&map[string]Any.insert_bool <a href="#&map[string]Any.insert_bool">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni/builder.v#L22"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> obj <span class="token builtin">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span> <span class="token function">insert_bool</span><span class="token punctuation">(</span>key <span class="token builtin">string</span><span class="token punctuation">,</span> val <span class="token builtin">bool</span><span class="token punctuation">)</span></code></pre>
+<p>Inserts a bool into the map.</p>
+</section>
+<section id="&map[string]Any.insert_map" class="doc-node">
+<div class="title"><h2>&map[string]Any.insert_map <a href="#&map[string]Any.insert_map">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni/builder.v#L26"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> obj <span class="token builtin">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span> <span class="token function">insert_map</span><span class="token punctuation">(</span>key <span class="token builtin">string</span><span class="token punctuation">,</span> val <span class="token builtin">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span></code></pre>
+<p>Inserts a map into the map.</p>
+</section>
+<section id="&map[string]Any.insert_arr" class="doc-node">
+<div class="title"><h2>&map[string]Any.insert_arr <a href="#&map[string]Any.insert_arr">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni/builder.v#L30"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> obj <span class="token builtin">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span> <span class="token function">insert_arr</span><span class="token punctuation">(</span>key <span class="token builtin">string</span><span class="token punctuation">,</span> val <span class="token punctuation">[</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span></code></pre>
+<p>Inserts an array into the map.</p>
+</section>
+<section id="&[]Any.insert_str" class="doc-node">
+<div class="title"><h2>&[]Any.insert_str <a href="#&[]Any.insert_str">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni/builder.v#L34"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> arr <span class="token punctuation">[</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span> <span class="token function">insert_str</span><span class="token punctuation">(</span>val <span class="token builtin">string</span><span class="token punctuation">)</span></code></pre>
+<p>Inserts a string into the array.</p>
+</section>
+<section id="&[]Any.insert_int" class="doc-node">
+<div class="title"><h2>&[]Any.insert_int <a href="#&[]Any.insert_int">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni/builder.v#L40"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> arr <span class="token punctuation">[</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span> <span class="token function">insert_int</span><span class="token punctuation">(</span>val <span class="token builtin">int</span><span class="token punctuation">)</span></code></pre>
+<p>Inserts an int into the array.</p>
+</section>
+<section id="&[]Any.insert_f" class="doc-node">
+<div class="title"><h2>&[]Any.insert_f <a href="#&[]Any.insert_f">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni/builder.v#L44"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> arr <span class="token punctuation">[</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span> <span class="token function">insert_f</span><span class="token punctuation">(</span>val <span class="token builtin">f64</span><span class="token punctuation">)</span></code></pre>
+<p>Inserts a float into the array.</p>
+</section>
+<section id="&[]Any.insert_null" class="doc-node">
+<div class="title"><h2>&[]Any.insert_null <a href="#&[]Any.insert_null">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni/builder.v#L48"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> arr <span class="token punctuation">[</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span> <span class="token function">insert_null</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre>
+<p>Inserts a null into the array.</p>
+</section>
+<section id="&[]Any.insert_bool" class="doc-node">
+<div class="title"><h2>&[]Any.insert_bool <a href="#&[]Any.insert_bool">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni/builder.v#L52"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> arr <span class="token punctuation">[</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span> <span class="token function">insert_bool</span><span class="token punctuation">(</span>val <span class="token builtin">bool</span><span class="token punctuation">)</span></code></pre>
+<p>Inserts a bool into the array.</p>
+</section>
+<section id="&[]Any.insert_map" class="doc-node">
+<div class="title"><h2>&[]Any.insert_map <a href="#&[]Any.insert_map">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni/builder.v#L56"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> arr <span class="token punctuation">[</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span> <span class="token function">insert_map</span><span class="token punctuation">(</span>val <span class="token builtin">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span></code></pre>
+<p>Inserts a map into the array.</p>
+</section>
+<section id="&[]Any.insert_arr" class="doc-node">
+<div class="title"><h2>&[]Any.insert_arr <a href="#&[]Any.insert_arr">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni/builder.v#L60"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span><span class="token keyword">mut</span> arr <span class="token punctuation">[</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span> <span class="token function">insert_arr</span><span class="token punctuation">(</span>val <span class="token punctuation">[</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span></code></pre>
+<p>Inserts an array into the array.</p>
+</section>
 <section id="Any" class="doc-node">
 <div class="title"><h2>Any <a href="#Any">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/decoder.v#L1"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">type</span> Any <span class="token operator">=</span> Null <span class="token operator">|</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>Any <span class="token operator">|</span> <span class="token builtin">any_float</span> <span class="token operator">|</span> <span class="token builtin">any_int</span> <span class="token operator">|</span> <span class="token builtin">bool</span> <span class="token operator">|</span> <span class="token builtin">f64</span> <span class="token operator">|</span> <span class="token builtin">int</span> <span class="token operator">|</span> <span class="token builtin">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span>Any <span class="token operator">|</span> <span class="token builtin">string</span></code></pre>
 <p><code>Any</code> is a sum type that lists the possible types to be decoded and used.</p>
 </section>
 <section id="Any.str" class="doc-node">
-<div class="title"><h2>Any.str <a href="#Any.str">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni/encoder.v#L26"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>f Any<span class="token punctuation">)</span> <span class="token function">str</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">string</span></code></pre>
+<div class="title"><h2>Any.str <a href="#Any.str">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni/encoder.v#L27"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>f Any<span class="token punctuation">)</span> <span class="token function">str</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">string</span></code></pre>
 <p>String representation of the <code>Any</code> type.</p>
 </section>
 <section id="Any.as_map" class="doc-node">
@@ -221,6 +315,14 @@ fn main() {
 <span class="token punctuation">}</span></code></pre>
 <p><code>Null</code> struct is a simple representation of the <code>null</code> value in JSON.</p>
 </section>
+<section id="map[string]Any.str" class="doc-node">
+<div class="title"><h2>map[string]Any.str <a href="#map[string]Any.str">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni/encoder.v#L4"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>flds <span class="token builtin">map</span><span class="token punctuation">[</span><span class="token builtin">string</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span> <span class="token function">str</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">string</span></code></pre>
+<p>String representation of the <code>map[string]Any</code>.</p>
+</section>
+<section id="[]Any.str" class="doc-node">
+<div class="title"><h2>[]Any.str <a href="#[]Any.str">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni/encoder.v#L17"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token punctuation">(</span>flds <span class="token punctuation">[</span><span class="token punctuation">]</span>Any<span class="token punctuation">)</span> <span class="token function">str</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token builtin">string</span></code></pre>
+<p>String representation of the <code>[]Any</code>.</p>
+</section>
 <section id="raw_decode" class="doc-node">
 <div class="title"><h2>raw_decode <a href="#raw_decode">#</a></h2><a class="link" rel="noreferrer" target="_blank" href="https://github.com/nedpals/jisoni/blob/master/jisoni.v#L3"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></a></div><pre class="signature"><code><span class="token keyword">fn</span> <span class="token function">raw_decode</span><span class="token punctuation">(</span>src <span class="token builtin">string</span><span class="token punctuation">)</span> ?Any</code></pre>
 <p>Decodes a JSON string into an <code>Any</code> type. Returns an option.</p>
@@ -238,7 +340,7 @@ fn main() {
 <p>A simple function that returns <code>Null</code> struct. For use on constructing an <code>Any</code> object.</p>
 </section>
 
-<div class="footer">Powered by vdoc. Generated on: 17 Jun 2020 11:05:43</div>
+<div class="footer">Powered by vdoc. Generated on: 17 Jun 2020 12:43:37</div>
 </div>
 </div></div><script src="doc.js"></script></body>
 	</html>

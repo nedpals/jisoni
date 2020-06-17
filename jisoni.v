@@ -1,5 +1,5 @@
 module jisoni
-
+// Decodes a JSON string into an `Any` type. Returns an option.
 pub fn raw_decode(src string) ?Any {
 	mut p := new_parser(src)
 	p.detect_parse_mode()
@@ -18,7 +18,7 @@ pub fn raw_decode(src string) ?Any {
 
 	return fi
 }
-
+// A generic function that decodes a JSON string into the target type.
 pub fn decode<T>(src string) T {
 	res := raw_decode(src) or {
 		panic(err)
@@ -27,15 +27,15 @@ pub fn decode<T>(src string) T {
 	mut typ := T{}
 	return typ.from_json(res)
 }
-
+// A generic function that encodes a type into a JSON string.
 pub fn encode<T>(typ T) string {
 	return typ.to_json()
 }
-
+// A simple function that returns `Null` struct. For use on constructing an `Any` object.
 pub fn null() Null {
 	return Null{}
 }
-
+// Use `Any` as a map.
 pub fn (f Any) as_map() map[string]Any {
 	mut mp := map[string]Any
 
@@ -77,7 +77,7 @@ pub fn (f Any) as_map() map[string]Any {
 		}
 	}
 }
-
+// Use `Any` as a string.
 pub fn (f Any) as_str() string {
 	match f {
 		string {
@@ -88,7 +88,7 @@ pub fn (f Any) as_str() string {
 		}
 	}
 }
-
+// Use `Any` as an integer.
 pub fn (f Any) as_int() int {
 	match f {
 		int {
@@ -102,7 +102,7 @@ pub fn (f Any) as_int() int {
 		}
 	}
 }
-
+// Use `Any` as a float.
 pub fn (f Any) as_f() f64 {
 	match f {
 		int {
@@ -116,7 +116,7 @@ pub fn (f Any) as_f() f64 {
 		}
 	}
 }
-
+// Use `Any` as an array.
 pub fn (f Any) as_arr() []Any {
 	if typeof(f) == 'array_Field' {
 		arr := f as []Any

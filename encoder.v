@@ -1,6 +1,6 @@
 module jisoni
 import strings
-
+// String representation of the `map[string]Any`.
 pub fn (flds map[string]Any) str() string {
 	mut wr := strings.new_builder(200)
 	wr.write('{')
@@ -14,7 +14,7 @@ pub fn (flds map[string]Any) str() string {
 	wr.write('}')
 	return wr.str()
 }
-
+// String representation of the `[]Any`.
 pub fn (flds []Any) str() string {
 	mut wr := strings.new_builder(200)
 	wr.write('[')
@@ -25,7 +25,7 @@ pub fn (flds []Any) str() string {
 	wr.write(']')
 	return wr.str()
 }
-
+// String representation of the `Any` type.
 pub fn (f Any) str() string {
 	match f {
 		string {

@@ -5,8 +5,9 @@ import strconv
 import v.scanner
 import v.token
 
+// `Any` is a sum type that lists the possible types to be decoded and used.
 pub type Any = string | int | f64 | any_int | any_float | bool | Null | []Any | map[string]Any
-
+// `Null` struct is a simple representation of the `null` value in JSON.
 pub struct Null {}
 
 enum ParseMode {

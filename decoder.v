@@ -20,6 +20,11 @@ enum ParseMode {
     string
 }
 
+const (
+	formfeed_err = 'formfeed not allowed.'
+	eof_err = 'reached eof. data not closed properly.'
+)
+
 struct Parser {
 mut:
 	scanner &scanner.Scanner
@@ -68,9 +73,14 @@ fn check_valid_hex(str string) ?bool {
 	return true
 }
 
+fn (p Parser) is_formfeed() bool {
+	prev_tok_pos := p.p_tok.pos + p.p_tok.len - 2
+
 	if prev_tok_pos < p.scanner.text.len && p.scanner.text[prev_tok_pos] == 0x0c {
-		return error('formfeed not allowed.')
+		return true
 	}
+
+	return false
 }
 
 fn (p Parser) is_singlequote() bool {
@@ -189,9 +199,9 @@ fn (mut p Parser) decode_value() ?Field {
 	}
 	p.next()
 
-	// p.is_linefeed() or {
-	// 	return error(err)
-	// }
+	if p.is_formfeed() {
+		return error(formfeed_err)
+	}
 
 	return fi
 }
@@ -293,17 +303,9 @@ fn (mut p Parser) decode_number() ?Field {
 fn (mut p Parser) decode_array() ?Field {
 	mut items := []Field{}
 	p.next()
-
-	// todo
-	// if p.n_tok.kind != p.tok.kind {
-	// 	p.is_linefeed() or {
-	// 		return error(err)
-	// 	}
-	// }
-
 	for p.tok.kind != .rsbr {
 		if p.tok.kind == .eof {
-			return error('reached eof. data not closed properly.')
+			return error(eof_err)
 		}
 
 		item := p.decode_value() or {
@@ -311,11 +313,6 @@ fn (mut p Parser) decode_array() ?Field {
 		}
 
 		items << item
-
-		// p.is_linefeed() or {
-		// 	return error(err)
-		// }
-
 		if p.tok.kind == .comma && p.n_tok.kind !in [.rsbr, .comma] {
 			p.next()
 			continue
@@ -340,12 +337,13 @@ fn (mut p Parser) decode_object() ?Field {
 	for p.tok.kind != .rcbr {
 		is_key := p.tok.kind == .string && p.n_tok.kind == .colon
 
-		// p.is_linefeed() or {
-		// 	return error(err)
+		// todo
+		// if p.is_formfeed() {
+		// 	return error(formfeed_err)
 		// }
 
 		if p.tok.kind == .eof {
-			return error('reached eof. data not closed properly.')
+			return error(eof_err)
 		}
 
 		if p.is_singlequote() {

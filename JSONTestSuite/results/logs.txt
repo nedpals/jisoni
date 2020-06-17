@@ -33,5 +33,3 @@ V JISONI	IMPLEMENTATION_PASS	i_structure_UTF-8_BOM_empty_object.json
 V JISONI	IMPLEMENTATION_PASS	i_number_very_big_negative_int.json
 V JISONI	IMPLEMENTATION_PASS	i_string_invalid_utf-8.json
 V JISONI	IMPLEMENTATION_FAIL	i_string_utf16LE_no_BOM.json
-V JISONI	SHOULD_HAVE_FAILED	n_string_invalid_unicode_escape.json
-V JISONI	SHOULD_HAVE_FAILED	n_structure_whitespace_formfeed.json

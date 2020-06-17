@@ -1,6 +1,6 @@
-module main
+module jisoni
 
-fn raw_decode(src string) ?Field {
+pub fn raw_decode(src string) ?Field {
 	mut p := new_parser(src)
 	p.detect_parse_mode()
 
@@ -19,7 +19,7 @@ fn raw_decode(src string) ?Field {
 	return fi
 }
 
-fn decode<T>(src string) T {
+pub fn decode<T>(src string) T {
 	res := raw_decode(src) or {
 		panic(err)
 	}
@@ -28,7 +28,7 @@ fn decode<T>(src string) T {
 	return typ.from_json(res)
 }
 
-fn (f Field) as_map() map[string]Field {
+pub fn (f Field) as_map() map[string]Field {
 	mut mp := map[string]Field
 
 	match f {
@@ -65,13 +65,12 @@ fn (f Field) as_map() map[string]Field {
 				return mp
 			}
 
-			mp['0'] = Undefined{}
 			return mp
 		}
 	}
 }
 
-fn (f Field) as_str() string {
+pub fn (f Field) as_str() string {
 	match f {
 		string {
 			return f.str().trim_left('"').trim_right('"')
@@ -82,7 +81,7 @@ fn (f Field) as_str() string {
 	}
 }
 
-fn (f Field) as_int() int {
+pub fn (f Field) as_int() int {
 	match f {
 		int {
 			return *it
@@ -96,7 +95,7 @@ fn (f Field) as_int() int {
 	}
 }
 
-fn (f Field) as_f() f64 {
+pub fn (f Field) as_f() f64 {
 	match f {
 		int {
 			return f.str().f64()
@@ -110,7 +109,7 @@ fn (f Field) as_f() f64 {
 	}
 }
 
-fn (f Field) as_arr() []Field {
+pub fn (f Field) as_arr() []Field {
 	if typeof(f) == 'array_Field' {
 		arr := f as []Field
 		return *arr

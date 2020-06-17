@@ -1,4 +1,4 @@
-module main
+module jisoni
 import strings
 
 pub fn (flds map[string]Field) str() string {

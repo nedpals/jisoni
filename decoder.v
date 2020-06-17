@@ -1,11 +1,11 @@
-module main
+module jisoni
 
 import strings
 import strconv
 import v.scanner
 import v.token
 
-type Field = string | int | f64 | any_int | any_float | bool | Null | []Field | map[string]Field
+pub type Field = string | int | f64 | any_int | any_float | bool | Null | []Field | map[string]Field
 
 struct Null {}
 

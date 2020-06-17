@@ -7,7 +7,7 @@ import v.token
 
 pub type Any = string | int | f64 | any_int | any_float | bool | Null | []Any | map[string]Any
 
-struct Null {}
+pub struct Null {}
 
 enum ParseMode {
     array

@@ -152,8 +152,9 @@ Jisoni provides methods for turning `Any` types into usable types. The following
 Licensed under [MIT](LICENSE)
 
 ## Testing
-1. Run `test.sh` (for Unix systems) or `test.bat` (for Windows)
-2. Open `parsing.html` inside the `results/` folder of the JSON test suite. 
+Testing instructions will be updated soon.
+<!-- 1. Run `test.sh` (for Unix systems) or `test.bat` (for Windows)
+2. Open `parsing.html` inside the `results/` folder of the JSON test suite.  -->
 
 ## Copyright
 (c) 2020- Ned Palacios

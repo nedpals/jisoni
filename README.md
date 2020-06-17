@@ -47,7 +47,7 @@ fn main() {
 }
 ```
 ## Using `decode<T>`
-In order to use the `decode<T>` function, you need to explicitly define a `from_json` method from that type you're going to target which accepts a `jisoni.Any` argument and map the fields you're going to put into the type.
+In order to use the `decode<T>` function, you need to explicitly define a `from_json` method from that type you're going to target in which it accepts a `jisoni.Any` argument and inside of it you to map the fields you're going to put into the type.
 
 ```v
 struct Person {
@@ -100,7 +100,7 @@ fn (mut p Person) from_json(f Field) Person {
 ### Custom Names
 In `json`, you can specify the field name you're mapping into the struct field by specifying a `json:` tag. In Jisoni, just simply cast the base field into a map (`as_map()`) and get the value of the field you wish to put into the struct/type.
 
-```
+```v
 fn (mut p Person) from_json(f Field) Person {
     obj := f.as_map()
     

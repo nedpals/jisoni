@@ -145,7 +145,7 @@ Jisoni provides methods for turning `Any` types into usable types. The following
 - ~~Encoding~~
 - ~~Performance~~ (Not an important issue for now) 
 - ~~Testing (Especially on JSON Test Suite)~~
-- Error Messages (adding line numbers to message is WIP)
+- ~~Error Messages (adding line numbers to message is WIP)~~
 - ~~Parsing errors (Avoid correcting malformed/invalid ones!)~~
 
 ## License

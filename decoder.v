@@ -62,12 +62,12 @@ fn new_parser(srce string) Parser {
 
 fn check_valid_hex(str string) ?bool {
 	if str.len != 4 {
-		return error('hex string must be 4 characters')
+		return error('Hex string must be 4 characters.')
 	}
 
 	for l in str {
 		if l.is_hex_digit() { continue }
-		return error('string not a hex digit.')
+		return error('Provided string is not a hex digit.')
 	}
 
 	return true
@@ -137,7 +137,7 @@ fn (mut p Parser) decode_value() ?Any {
 	}
 
 	if p.n_level == 500 {
-		return error('reached max nesting level.')
+		return error('Reached maximum nesting level of 500.')
 	}
 
 	match p.tok.kind {
@@ -167,14 +167,14 @@ fn (mut p Parser) decode_value() ?Any {
 		}
 		.name {
 			if p.tok.lit != 'null' {
-				return error('unknown identifier `$p.tok.lit`')
+				return error('Unknown identifier `$p.tok.lit`')
 			}
 
 			fi = Any(Null{})
 		}
 		.string {
 			if p.is_singlequote() {
-				return error('strings must be in double-quotes.')
+				return error('Strings must be in double-quotes.')
 			}
 
 			item := p.decode_string() or {
@@ -194,7 +194,7 @@ fn (mut p Parser) decode_value() ?Any {
 				return fi
 			}
 
-			return error('[decode_value] unknown token `$p.tok.lit`')
+			return error('[decode_value] Unknown token `$p.tok.lit`')
 		}
 	}
 	p.next()
@@ -213,11 +213,11 @@ fn (mut p Parser) decode_string() ?Any {
 		// s := p.tok.lit[i].str()
 		// println('$i $s')
 		if ((i-1 >= 0 && p.tok.lit[i-1] != `/`) || i == 0) && int(p.tok.lit[i]) in [9, 10, 0] {
-			return error('must be escaped with a backslash')
+			return error('Character must be escaped with a backslash.')
 		}
 
 		if i == p.tok.lit.len-1 && p.tok.lit[i] == 92 {
-			return error('invalid backslash escape')
+			return error('Invalid backslash escape.')
 		}
 
 		if i+1 < p.tok.lit.len && p.tok.lit[i] == 92 {
@@ -234,7 +234,7 @@ fn (mut p Parser) decode_string() ?Any {
 						i += 5
 						continue
 					} else {
-						return error('incomplete unicode escape.')
+						return error('Incomplete unicode escape.')
 					}
 				}
 
@@ -242,15 +242,15 @@ fn (mut p Parser) decode_string() ?Any {
 				strwr.write_b(p.tok.lit[i])
 				continue
 			} else {
-				return error('invalid backslash escape')
+				return error('Invalid backslash escape.')
 			}
 
 			if peek == 85 {
-				return error('unicode endpoints must be in lowercase `u`.')
+				return error('Unicode endpoints must be in lowercase `u`.')
 			}
 
 			if int(peek) in [9, 229] {
-				return error('unicode endpoint not allowed.')
+				return error('Unicode endpoint not allowed.')
 			}
 		}
 
@@ -267,19 +267,19 @@ fn (mut p Parser) decode_number() ?Any {
 	sep_by_dot := tl.to_lower().split('.')
 
 	if tl.starts_with('0x') && tl.all_after('0x').len <= 2 {
-		return error('hex numbers should not be less than or equal to two digits.')
+		return error('Hex numbers should not be less than or equal to two digits.')
 	}
 
 	if src[p.p_tok.pos + p.p_tok.len] == `0` && src[p.p_tok.pos + p.p_tok.len + 1].is_digit() {
-		return error('leading zeroes in integers are not allowed.')
+		return error('Leading zeroes in integers are not allowed.')
 	}
 
 	if tl.starts_with('.') {
-		return error('decimals must start with a digit followed by a dot.')
+		return error('Decimals must start with a digit followed by a dot.')
 	}
 
 	if tl.ends_with('+') || tl.ends_with('-') {
-		return error('exponents must have a digit before the sign.')
+		return error('Exponents must have a digit before the sign.')
 	}
 
 	if sep_by_dot.len > 1 {
@@ -289,7 +289,7 @@ fn (mut p Parser) decode_number() ?Any {
 		last := sep_by_dot.last()
 
 		if last.starts_with('e') {
-			return error('exponents must have a digit before the exponent notation.')
+			return error('Exponents must have a digit before the exponent notation.')
 		}
 	}
 
@@ -322,7 +322,7 @@ fn (mut p Parser) decode_array() ?Any {
 			break
 		}
 
-		return error('[decode_array] unknown token `$p.tok.lit`')
+		return error('Unknown token `$p.tok.lit` when decoding arrays.')
 	}
 
 	return Any(items)
@@ -347,11 +347,11 @@ fn (mut p Parser) decode_object() ?Any {
 		}
 
 		if p.is_singlequote() {
-			return error('object keys must be in single quotes.')
+			return error('Object keys must be in single quotes.')
 		}
 
 		if !is_key {
-			return error('invalid token `$p.tok.lit`, expected `string`')
+			return error('Invalid token `$p.tok.lit`, expected `string`')
 		}
 
 		cur_key = p.tok.lit
@@ -373,7 +373,7 @@ fn (mut p Parser) decode_object() ?Any {
 			break
 		}
 
-		return error('[decode_object] unknown token `$p.tok.lit`')
+		return error('Unknown token `$p.tok.lit` when decoding object.')
 	}
 	return Any(fields)
 }

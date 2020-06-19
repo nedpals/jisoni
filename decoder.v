@@ -55,7 +55,7 @@ fn new_parser(srce string) Parser {
 		}
 	}
 	mut p := Parser{
-		scanner: scanner.new_scanner(src, .parse_comments),
+		scanner: scanner.new_scanner(src, .parse_comments, false),
 	}
 	return p
 }

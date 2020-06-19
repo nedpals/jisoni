@@ -4,6 +4,7 @@ import strings
 import strconv
 import v.scanner
 import v.token
+import v.util
 
 // `Any` is a sum type that lists the possible types to be decoded and used.
 pub type Any = string | int | f64 | any_int | any_float | bool | Null | []Any | map[string]Any
@@ -41,6 +42,22 @@ fn (mut p Parser) next() {
 	p.tok = p.n_tok
 	p.n_tok = p.nn_tok
 	p.nn_tok = p.scanner.scan()
+}
+
+fn (p Parser) emit_error(msg string) string {
+	source := p.scanner.text
+	cur := p.tok
+	mut pp := util.imax(0, util.imin(source.len - 1, cur.pos))
+	if source.len > 0 {
+		for ; pp >= 0; pp-- {
+			if source[pp] == `\r` || source[pp] == `\n` {
+				break
+			}
+		}
+	}
+	column := util.imax(0, cur.pos - pp + cur.len - 1)
+	line := cur.line_nr
+	return msg + ' (At line $line, column $column)'
 }
 
 fn new_parser(srce string) Parser {

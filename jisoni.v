@@ -5,15 +5,15 @@ pub fn raw_decode(src string) ?Any {
 	p.detect_parse_mode()
 
 	if p.mode == .invalid {
-		return error('jisoni: invalid JSON.')
+		return error('[jisoni] ' + p.emit_error('Invalid JSON.'))
 	}
 
 	fi := p.decode_value() or {
-		return error('jisoni: ' + err)
+		return error('[jisoni] ' + p.emit_error(err))
 	}
 
 	if p.tok.kind != .eof {
-		return error('jisoni: [raw_decode] unknown token `$p.tok.kind`')
+		return error('[jisoni] ' + p.emit_error('Unknown token `$p.tok.kind`.'))
 	}
 
 	return fi

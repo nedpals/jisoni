@@ -29,32 +29,32 @@ pub fn (flds []Any) str() string {
 pub fn (f Any) str() string {
 	match f {
 		string {
-			str := *it
+			str := *f
 			return '"$str"'
 		}
 		int {
-			return (*it).str()
+			return (*f).str()
 		}
 		f64 {
-			return (*it).str()
+			return (*f).str()
 		}
 		any_int {
-			return (*it).str()
+			return (*f).str()
 		}
 		any_float {
-			return (*it).str()
+			return (*f).str()
 		}
 		bool {
-			return (*it).str()
+			return (*f).str()
 		}
 		map[string]Any {
-			return (*it).str()
+			return (*f).str()
 		}
 		Null {
 			return 'null'
 		}
 		else {
-			if typeof(f) == 'array_Field' {
+			if typeof(f) == 'array_Any' {
 				arr := f as []Any
 				return (*arr).str()
 			}

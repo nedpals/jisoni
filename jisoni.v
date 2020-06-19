@@ -41,26 +41,26 @@ pub fn (f Any) as_map() map[string]Any {
 
 	match f {
 		map[string]Any {
-			return it
+			return f
 		}
 		string {
-			mp['0'] = it
+			mp['0'] = f
 			return mp
 		}
 		int {
-			mp['0'] = it
+			mp['0'] = f
 			return mp
 		}
 		bool {
-			mp['0'] = it
+			mp['0'] = f
 			return mp
 		}
 		f64 {
-			mp['0'] = it
+			mp['0'] = f
 			return mp
 		}
 		Null {
-			mp['0'] = it
+			mp['0'] = f
 			return mp
 		}
 		else {
@@ -92,7 +92,7 @@ pub fn (f Any) as_str() string {
 pub fn (f Any) as_int() int {
 	match f {
 		int {
-			return *it
+			return *f
 		}
 		f64 {
 			return f.str().int()
@@ -109,7 +109,7 @@ pub fn (f Any) as_f() f64 {
 			return f.str().f64()
 		}
 		f64 {
-			return *it
+			return *f
 		}
 		else {
 			return 0.0

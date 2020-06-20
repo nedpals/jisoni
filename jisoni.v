@@ -1,4 +1,10 @@
 module jisoni
+
+pub interface Serializable {
+	from_json(f Any)
+	to_json() string
+}
+
 // Decodes a JSON string into an `Any` type. Returns an option.
 pub fn raw_decode(src string) ?Any {
 	mut p := new_parser(src)
@@ -23,9 +29,9 @@ pub fn decode<T>(src string) T {
 	res := raw_decode(src) or {
 		panic(err)
 	}
-
 	mut typ := T{}
-	return typ.from_json(res)
+	typ.from_json(res)
+	return typ
 }
 // A generic function that encodes a type into a JSON string.
 pub fn encode<T>(typ T) string {

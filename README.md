@@ -60,7 +60,7 @@ mut:
     pets []string
 }
 
-fn (mut p Person) from_json(f Any) Person {
+fn (mut p Person) from_json(f Any) {
     obj := f.as_map()
     for k, v in obj {
         match k {
@@ -70,7 +70,6 @@ fn (mut p Person) from_json(f Any) Person {
             else {}
         }
     }
-    return p
 }
 
 fn (p Person) to_json() string {
@@ -97,15 +96,12 @@ Jisoni cannot use struct tags just like when you use the `json` module. However,
 Jisoni have a `null` value for differentiating an undefined value and a null value. Use `is` for verifying the field you're using is a null.
 
 ```v
-fn (mut p Person) from_json(f Any) Person {
+fn (mut p Person) from_json(f Any) {
     obj := f.as_map()
-    
     if obj['age'] is jisoni.Null {
         // use a default value
         p.age = 10
     }
-
-    return p
 }
 ```
 
@@ -113,10 +109,9 @@ fn (mut p Person) from_json(f Any) Person {
 In `json`, you can specify the field name you're mapping into the struct field by specifying a `json:` tag. In Jisoni, just simply cast the base field into a map (`as_map()`) and get the value of the field you wish to put into the struct/type.
 
 ```v
-fn (mut p Person) from_json(f jisoni.Any) Person {
+fn (mut p Person) from_json(f jisoni.Any) {
     obj := f.as_map()
     p.name = obj['nickname'].as_str()
-    return p
 }
 ```
 

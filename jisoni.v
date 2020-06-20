@@ -64,7 +64,7 @@ pub fn (f Any) as_map() map[string]Any {
 			return mp
 		}
 		else {
-			if typeof(f) == 'array_Field' {
+			if typeof(f) == 'array_Any' {
 				arr := f as []Any
 				for i, fi in arr {
 					mp[i.str()] = fi
@@ -118,7 +118,7 @@ pub fn (f Any) as_f() f64 {
 }
 // Use `Any` as an array.
 pub fn (f Any) as_arr() []Any {
-	if typeof(f) == 'array_Field' {
+	if typeof(f) == 'array_Any' {
 		arr := f as []Any
 		return *arr
 	}

@@ -1,3 +1,5 @@
+> **NOTE**: Jisoni is now integrated into the V standard library (vlib) as an experimental module. See the [source code and documentation](https://github.com/vlang/v/tree/master/vlib/x/json2) for more information. If you have issues or concerns regarding the use of the library, please file an issue into the [V language repo](https://github.com/vlang/v/issues) instead.
+
 # JISONI
 A work-in-progress JSON parser written on pure V. It aims to [replace CJSON](https://github.com/vlang/v/issues/309) and provides a cleaner and simple-to-use API for encoding and decoding JSON.
 
